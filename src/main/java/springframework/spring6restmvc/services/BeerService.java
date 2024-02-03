@@ -8,5 +8,5 @@ import java.util.UUID;
 public interface BeerService {
     List<Beer> beerList();
 
-    Beer getBearById(UUID id);
+    Beer getBeerById(UUID id);
 }
