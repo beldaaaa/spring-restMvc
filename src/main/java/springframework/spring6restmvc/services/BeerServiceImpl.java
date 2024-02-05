@@ -70,4 +70,23 @@ public class BeerServiceImpl implements BeerService {
 
         return beerMap.get(id);
     }
+
+    @Override
+    public Beer saveNewBeer(Beer beer) {
+        Beer savedBeer = Beer.builder()//here we are again mimmicking what the persistent store is going to do here
+                .id(UUID.randomUUID())
+                .createdData(LocalDateTime.now())
+                .updateData(LocalDateTime.now())
+                .beerName(beer.getBeerName())
+                .beerStyle(beer.getBeerStyle())
+                .quantityOnHand(beer.getQuantityOnHand())
+                .upc(beer.getUpc())
+                .price(beer.getPrice())
+                .build();
+        beerMap.put(savedBeer.getId(), savedBeer);
+        return savedBeer;
+        //so this persistence method takes in the object that was created
+        //I am assigning properties as if I was the DB, but I am taking from the object that I passed in the property
+        //and then I am persissting it to my map and then returning back the new saveBeer object
+    }
 }
