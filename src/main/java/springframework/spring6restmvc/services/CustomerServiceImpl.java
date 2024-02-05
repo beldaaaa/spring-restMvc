@@ -40,11 +40,15 @@ public class CustomerServiceImpl implements CustomerService {
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
                 .build();
+
+        customerMap.put(customer1.getId(),customer1);
+        customerMap.put(customer2.getId(),customer2);
+        customerMap.put(customer3.getId(),customer3);
     }
 
     @Override
     public List<Customer> customerList() {
-        return new ArrayList<>(customerList());
+        return new ArrayList<>(customerMap.values());
     }
 
     @Override

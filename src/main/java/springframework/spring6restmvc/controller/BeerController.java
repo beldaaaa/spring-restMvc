@@ -21,16 +21,18 @@ public class BeerController {
 
     @RequestMapping(method = RequestMethod.GET)//maps the path API of one beer to the list of beers
     //so when request comes in, I invoke my service to get the list of beers and that is returned back
-    //to the view handler, wich in this case is going to be Jackson to produce the JSON response
+    //to the view handler, which in this case is going to be Jackson to produce the JSON response
     //in previous ver it was just "/api/v1/beer"
     public List<Beer> beerList() {
         return beerService.beerList();
     }
-@RequestMapping(value = "{beerId}",method = RequestMethod.GET)//because we added requestMapping on class level
-//we can use just only "{beerId}" instead of "/api/v1/beer/{beedId}"
+
+    @RequestMapping(value = "{beerId}", method = RequestMethod.GET)//because we added requestMapping on class level
+//we can use just only "{beerId}" instead of "/api/v1/beer/{beerId}"
 //plus both method are limited to only GET methods so controller will not act on any other request
-    public Beer getBearById(@PathVariable("beerId") UUID beerId) {//Spring should matchthese 2 values "beerId"
-        //but dont rely on that so thats why "@PathVariable("beerId")" is added
+    public Beer getBearById(@PathVariable("beerId") UUID beerId) {//Spring should match these 2 values "beerId"
+        //but don't rely on that so that's why "@PathVariable("beerId")" is added, its mandatory especially if
+        //variable names differ
 
         log.debug("Get Beer by Id - in controller");
 
