@@ -2,6 +2,7 @@ package springframework.spring6restmvc.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,12 @@ public class BeerController {
     @PostMapping//this is cleaner mapping
     //@RequestMapping(method = RequestMethod.POST)//this is second option
     public ResponseEntity handlePost(@RequestBody Beer beer){//@BR annotation tells Spring to bind the JSON body to a Beer object
+
         Beer savedBeer = beerService.saveNewBeer(beer);//mimmicking what persistence app would do but this example is without DB so...
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location","/api/v1/beer/"+savedBeer.getId().toString());
+        //when a client using the REST API creates a new beer object, it will get back the location of object, including UUID
 
         return new ResponseEntity(HttpStatus.CREATED);//RE basically gives me the memory to one created for the status
         //comming back, so I am saying that I want this to accept it
