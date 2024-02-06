@@ -19,15 +19,25 @@ import java.util.UUID;
 public class BeerController {
     private final BeerService beerService;
 
+    //successful PUT in Postman is with "204 No Content"
+    //http://localhost:8080/api/v1/customer/343894bb-2a27-42cf-95b6-1e1e70b2608a I have to add specific id for put request
+    @PutMapping("{beerId}")
+    public ResponseEntity updateById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer) {
+
+        beerService.updateBeerById(beerId, beer);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
     //adding POST operation to accept a new beer into my repository
     @PostMapping//this is cleaner mapping
     //@RequestMapping(method = RequestMethod.POST)//this is second option
-    public ResponseEntity handlePost(@RequestBody Beer beer){//@BR annotation tells Spring to bind the JSON body to a Beer object
+    public ResponseEntity handlePost(@RequestBody Beer beer) {//@RB annotation tells Spring to bind the JSON body to a Beer object
 
         Beer savedBeer = beerService.saveNewBeer(beer);//mimmicking what persistence app would do but this example is without DB so...
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location","/api/v1/beer/"+savedBeer.getId().toString());
+        headers.add("Location", "/api/v1/beer/" + savedBeer.getId().toString());
         //when a client using the REST API creates a new beer object, it will get back the location of object, including UUID
 
         return new ResponseEntity(HttpStatus.CREATED);//RE basically gives me the memory to one created for the status
