@@ -13,7 +13,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class CustomerServiceImpl implements CustomerService {
-    private Map<UUID,Customer>customerMap;
+    private Map<UUID, Customer> customerMap;
 
     public CustomerServiceImpl(Map<UUID, Customer> customerMap) {
         this.customerMap = customerMap;
@@ -42,9 +42,9 @@ public class CustomerServiceImpl implements CustomerService {
                 .lastModifiedDate(LocalDateTime.now())
                 .build();
 
-        customerMap.put(customer1.getId(),customer1);
-        customerMap.put(customer2.getId(),customer2);
-        customerMap.put(customer3.getId(),customer3);
+        customerMap.put(customer1.getId(), customer1);
+        customerMap.put(customer2.getId(), customer2);
+        customerMap.put(customer3.getId(), customer3);
     }
 
     @Override
@@ -79,5 +79,10 @@ public class CustomerServiceImpl implements CustomerService {
         existing.setCustomerName(customer.getCustomerName());
 
         customerMap.put(existing.getId(), existing);
+    }
+
+    @Override
+    public void deleteById(UUID customerId) {
+        customerMap.remove(customerId);
     }
 }

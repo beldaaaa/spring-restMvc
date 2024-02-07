@@ -19,6 +19,14 @@ import java.util.UUID;
 public class BeerController {
     private final BeerService beerService;
 
+    @DeleteMapping("{beerId}")
+    public ResponseEntity deleteById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer) {
+
+        beerService.deleteById(beerId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     //successful PUT in Postman is with "204 No Content"
     //http://localhost:8080/api/v1/customer/343894bb-2a27-42cf-95b6-1e1e70b2608a I have to add specific id for put request
     @PutMapping("{beerId}")
