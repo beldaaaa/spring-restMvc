@@ -8,10 +8,7 @@ import springframework.spring6restmvc.model.BeerStyle;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -19,8 +16,8 @@ public class BeerServiceImpl implements BeerService {
     private Map<UUID, Beer> beerMap;// just for example as substitute for DB
     //so its initialized in ctor and generates data
 
-    public BeerServiceImpl(Map<UUID, Beer> beerMap) {
-        this.beerMap = beerMap;
+    public BeerServiceImpl() {
+        this.beerMap = new HashMap<>();
         Beer beer1 = Beer.builder()//builder pattern saves quite of code (no creating new object, no setters and returning value then,...)
                 .id(UUID.randomUUID())
                 .version(1)
