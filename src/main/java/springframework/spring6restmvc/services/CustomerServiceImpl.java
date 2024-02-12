@@ -6,18 +6,15 @@ import org.springframework.util.StringUtils;
 import springframework.spring6restmvc.model.Customer;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
 public class CustomerServiceImpl implements CustomerService {
     private Map<UUID, Customer> customerMap;
 
-    public CustomerServiceImpl(Map<UUID, Customer> customerMap) {
-        this.customerMap = customerMap;
+    public CustomerServiceImpl() {
+        this.customerMap = new HashMap<>();
 
         Customer customer1 = Customer.builder()
                 .customerName("Franta")
