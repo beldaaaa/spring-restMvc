@@ -1,5 +1,6 @@
 package springframework.spring6restmvc.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,8 +12,10 @@ import springframework.spring6restmvc.services.CustomerService;
 import springframework.spring6restmvc.services.CustomerServiceImpl;
 
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CustomerController.class)
@@ -23,6 +26,25 @@ public class CustomerControllerTest {
     CustomerService customerService;
 
     CustomerServiceImpl customerServiceImpl = new CustomerServiceImpl();
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Test
+    void createNewCustomer() throws Exception {
+        Customer customer = customerServiceImpl.customerList().getFirst();
+        customer.setVersion(null);
+        customer.setId(null);
+
+        given(customerService.saveNewCustomer(any(Customer.class))).willReturn(customerServiceImpl.customerList().get(1));
+
+        mockMvc.perform(post("/api/v1/customer")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customer)))
+                .andExpect(status().isCreated());
+//                .andExpect(header().exists("Location"));//doesnt work
+    }
 
     @Test
     void testCustomerList() throws Exception {

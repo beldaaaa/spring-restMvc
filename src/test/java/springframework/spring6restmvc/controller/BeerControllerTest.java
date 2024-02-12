@@ -1,5 +1,6 @@
 package springframework.spring6restmvc.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,11 +12,15 @@ import springframework.spring6restmvc.services.BeerService;
 import springframework.spring6restmvc.services.BeerServiceImpl;
 
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
+//Why use Spring MockMVC?
+//Spring MockMVC allows you to test the controller interactions in a servlet context
+//without the application running in an application server.
 @WebMvcTest(BeerController.class)//I want to limit this to BeerController class
 class BeerControllerTest {
 
@@ -27,8 +32,11 @@ class BeerControllerTest {
     BeerService beerService;
     BeerServiceImpl beerServiceImpl = new BeerServiceImpl();
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @Test
-    void testBeerList() throws Exception {
+    void getBeerList() throws Exception {
         given(beerService.beerList()).willReturn(beerServiceImpl.beerList());
 
         mockMvc.perform(get("/api/v1/beer")
@@ -54,4 +62,21 @@ class BeerControllerTest {
                 .andExpect(jsonPath("$.beerName", is(testBeer.getBeerName())));
         //this gets a beer object to return back from my Mock MVC controller
     }
+
+    @Test
+    void createNewBeer() throws Exception {
+        Beer beer = beerServiceImpl.beerList().getFirst();
+        beer.setVersion(null);
+        beer.setId(null);
+
+        given(beerService.saveNewBeer(any(Beer.class))).willReturn(beerServiceImpl.beerList().get(1));
+
+        mockMvc.perform(post("/api/v1/beer")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isCreated());
+//                .andExpect(header().exists("Location"));//doesnt work
+    }
+
 }
