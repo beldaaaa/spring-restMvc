@@ -1,7 +1,9 @@
 package springframework.spring6restmvc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -13,6 +15,7 @@ import springframework.spring6restmvc.services.BeerServiceImpl;
 
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -32,11 +35,46 @@ class BeerControllerTest {
     //without this mock bean I would get an exception saying that I dont have that dependency there
     //and I would have to provide it manually
     BeerService beerService;
-    BeerServiceImpl beerServiceImpl = new BeerServiceImpl();
-
     @Autowired
     ObjectMapper objectMapper;
+    BeerServiceImpl beerServiceImpl;
 
+    @BeforeEach
+    void setUp() {
+        beerServiceImpl = new BeerServiceImpl();
+    }
+
+    //    @Test
+//    void testDeleteBeer() throws Exception {
+//        Beer beer = beerServiceImpl.beerList().getFirst();
+//
+//        mockMvc.perform(delete("/api/v1/beer/" + beer.getId())
+//                        .accept(MediaType.APPLICATION_JSON)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(beer)))
+//                .andExpect(status().isNoContent());
+//
+//        verify(beerService).deleteById(any(UUID.class));
+//    }
+    @Test
+    void deleteBeer() throws Exception {//delete operation is probably the simplest REST operation
+        Beer beer = beerServiceImpl.beerList().getFirst();
+
+        mockMvc.perform(delete("/api/v1/beer/" + beer.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)//doesn't work without
+                        .content(objectMapper.writeValueAsString(beer)))//those 2 lines (but it should?)
+                .andExpect(status().isNoContent());
+
+        ArgumentCaptor<UUID> uuidArgumentCaptor = ArgumentCaptor.forClass(UUID.class);//argument captor created as Mockito class
+        //Using argument captor can compare the beer's id is equal to the one that is passed as a parameter to the URL.
+        verify(beerService).deleteById(uuidArgumentCaptor.capture());//sit on that mock and listen for anything what is passed in
+        //and ensure to pass proper UUID value
+        assertThat(beer.getId()).isEqualTo(uuidArgumentCaptor.getValue());//now with the value I can run assertions on it
+
+        //so basically it means I am making sure that the UUID that was passed to the controller through the path variable
+        // got parsed properly and sent to that
+    }
 
     @Test
     void updateBeer() throws Exception {
