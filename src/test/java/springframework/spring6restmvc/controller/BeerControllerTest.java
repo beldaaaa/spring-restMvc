@@ -11,11 +11,13 @@ import springframework.spring6restmvc.model.Beer;
 import springframework.spring6restmvc.services.BeerService;
 import springframework.spring6restmvc.services.BeerServiceImpl;
 
+import java.util.UUID;
+
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 //Why use Spring MockMVC?
@@ -34,6 +36,23 @@ class BeerControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+
+    @Test
+    void updateBeer() throws Exception {
+        Beer beer = beerServiceImpl.beerList().getFirst();//retrieves the first Beer object from the list of beers
+        // returned by the beerList() method of beerServiceImpl
+
+        mockMvc.perform(put("/api/v1/beer/" + beer.getId())
+                        .accept(MediaType.APPLICATION_JSON)//sets the Accept header of the HTTP request to application/json,
+                        // indicating that the client (the test in this case) expects JSON in the response
+                        .contentType(MediaType.APPLICATION_JSON)//sets the Content-Type header of the HTTP request to
+                        // application/json, indicating that the body of the request is in JSON format
+                        .content(objectMapper.writeValueAsString(beer)))//object to convert POJO to JSON representation
+                //(converts the beer object to a JSON string and includes it in the body of the HTTP request)
+                .andExpect(status().isNoContent());//assertion
+        verify(beerService).updateBeerById(any(UUID.class), any(Beer.class));//argument captor is used here (more later)
+    }
 
     @Test
     void getBeerList() throws Exception {
