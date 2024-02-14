@@ -64,7 +64,7 @@ class BeerControllerTest {
         //they are not going to send out a fully qualified object (only properties they want to change)
         beerMap.put("beerName", "New Name");
 
-        mockMvc.perform(patch("/api/v1/beer/" + beer.getId())
+        mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerMap)))
@@ -80,7 +80,7 @@ class BeerControllerTest {
     void deleteBeer() throws Exception {//delete operation is probably the simplest REST operation
         Beer beer = beerServiceImpl.beerList().getFirst();
 
-        mockMvc.perform(delete("/api/v1/beer/" + beer.getId())
+        mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)//doesn't work without
                         .content(objectMapper.writeValueAsString(beer)))//those 2 lines (but it should?)
@@ -102,7 +102,7 @@ class BeerControllerTest {
         Beer beer = beerServiceImpl.beerList().getFirst();//retrieves the first Beer object from the list of beers
         // returned by the beerList() method of beerServiceImpl
 
-        mockMvc.perform(put("/api/v1/beer/" + beer.getId())
+        mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
                         .accept(MediaType.APPLICATION_JSON)//sets the Accept header of the HTTP request to application/json,
                         // indicating that the client (the test in this case) expects JSON in the response
                         .contentType(MediaType.APPLICATION_JSON)//sets the Content-Type header of the HTTP request to
@@ -117,7 +117,7 @@ class BeerControllerTest {
     void getBeerList() throws Exception {
         given(beerService.beerList()).willReturn(beerServiceImpl.beerList());
 
-        mockMvc.perform(get("/api/v1/beer")
+        mockMvc.perform(get(BeerController.BEER_PATH)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -132,7 +132,7 @@ class BeerControllerTest {
         given(beerService.getBeerById(testBeer.getId())).willReturn(testBeer);//configuring Mockito to go ahead
         // and return that testBeer object.
         // So I get the testBeer object from the service implementation and then tell Mockito to return it
-        mockMvc.perform(get("/api/v1/beer/" + testBeer.getId())//I want ot perform get against URL
+        mockMvc.perform(get(BeerController.BEER_PATH_ID, testBeer.getId())//I want ot perform get against URL
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())//and I should get back an OK status
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -149,7 +149,7 @@ class BeerControllerTest {
 
         given(beerService.saveNewBeer(any(Beer.class))).willReturn(beerServiceImpl.beerList().get(1));
 
-        mockMvc.perform(post("/api/v1/beer")
+        mockMvc.perform(post(BeerController.BEER_PATH)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beer)))
