@@ -69,6 +69,14 @@ public class BeerController {
         return beerService.beerList();
     }
 
+    @ExceptionHandler(NotFoundException.class)//again annotation to have this handled by the framework
+    public ResponseEntity handleNotFoundException(){
+        return ResponseEntity.notFound().build();
+        //if any NFE occurs it will be handled by this handler method
+        //I return only simple response, but it could be something more complex
+        //This is not the best option, but it's good for demonstration
+    }
+
     @GetMapping(BEER_PATH_ID)
     //plus both method are limited to only GET methods so controller will not act on any other request
     public Beer getBearById(@PathVariable("beerId") UUID beerId) {//Spring should match these 2 values "beerId"
