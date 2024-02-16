@@ -3,7 +3,7 @@ package springframework.spring6restmvc.services;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import springframework.spring6restmvc.model.Beer;
+import springframework.spring6restmvc.model.BeerDTO;
 import springframework.spring6restmvc.model.BeerStyle;
 
 import java.math.BigDecimal;
@@ -13,12 +13,12 @@ import java.util.*;
 @Slf4j
 @Service
 public class BeerServiceImpl implements BeerService {
-    private Map<UUID, Beer> beerMap;// just for example as substitute for DB
+    private Map<UUID, BeerDTO> beerMap;// just for example as substitute for DB
     //so its initialized in ctor and generates data
 
     public BeerServiceImpl() {
         this.beerMap = new HashMap<>();
-        Beer beer1 = Beer.builder()//builder pattern saves quite of code (no creating new object, no setters and returning value then,...)
+        BeerDTO beer1 = BeerDTO.builder()//builder pattern saves quite of code (no creating new object, no setters and returning value then,...)
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("12")
@@ -29,7 +29,7 @@ public class BeerServiceImpl implements BeerService {
                 .createdData(LocalDateTime.now())
                 .updateData(LocalDateTime.now())
                 .build();
-        Beer beer2 = Beer.builder()
+        BeerDTO beer2 = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("10")
@@ -40,7 +40,7 @@ public class BeerServiceImpl implements BeerService {
                 .createdData(LocalDateTime.now())
                 .updateData(LocalDateTime.now())
                 .build();
-        Beer beer3 = Beer.builder()
+        BeerDTO beer3 = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("1000")
@@ -57,12 +57,12 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public List<Beer> beerList() {
+    public List<BeerDTO> beerList() {
         return new ArrayList<>(beerMap.values());
     }
 
     @Override
-    public Optional<Beer> getBeerById(UUID id) {
+    public Optional<BeerDTO> getBeerById(UUID id) {
 
         log.debug("Get Beer Id in service was called");
 
@@ -70,8 +70,8 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public Beer saveNewBeer(Beer beer) {
-        Beer savedBeer = Beer.builder()//here we are again mimmicking what the persistent store is going to do here
+    public BeerDTO saveNewBeer(BeerDTO beer) {
+        BeerDTO savedBeer = BeerDTO.builder()//here we are again mimmicking what the persistent store is going to do here
                 .id(UUID.randomUUID())
                 .createdData(LocalDateTime.now())
                 .updateData(LocalDateTime.now())
@@ -89,8 +89,8 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public void updateBeerById(UUID beerId, Beer beer) {
-        Beer existing = beerMap.get(beerId);
+    public void updateBeerById(UUID beerId, BeerDTO beer) {
+        BeerDTO existing = beerMap.get(beerId);
         existing.setBeerName(beer.getBeerName());
         existing.setPrice(beer.getPrice());
         existing.setUpc(beer.getUpc());
@@ -105,8 +105,8 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public void patchById(UUID beerId, Beer beer) {
-        Beer existing = beerMap.get(beerId);
+    public void patchById(UUID beerId, BeerDTO beer) {
+        BeerDTO existing = beerMap.get(beerId);
 
         if (StringUtils.hasText(beer.getBeerName())) {
             existing.setBeerName(beer.getBeerName());

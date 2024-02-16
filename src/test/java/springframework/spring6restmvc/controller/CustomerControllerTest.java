@@ -9,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import springframework.spring6restmvc.model.Customer;
+import springframework.spring6restmvc.model.CustomerDTO;
 import springframework.spring6restmvc.services.CustomerService;
 import springframework.spring6restmvc.services.CustomerServiceImpl;
 
@@ -41,11 +41,11 @@ public class CustomerControllerTest {
     @Captor
     ArgumentCaptor<UUID> uuidArgumentCaptor;
     @Captor
-    ArgumentCaptor<Customer> customerArgumentCaptor;
+    ArgumentCaptor<CustomerDTO> customerArgumentCaptor;
 
     @Test
     void patchCustomer() throws Exception {
-        Customer customer = customerServiceImpl.customerList().getFirst();
+        CustomerDTO customer = customerServiceImpl.customerList().getFirst();
         Map<String, Object> customerMap = new HashMap<>();
         customerMap.put("customerName", "Fakt se tak jmenuje");
 
@@ -63,7 +63,7 @@ public class CustomerControllerTest {
 
     @Test
     void deleteCustomer() throws Exception {
-        Customer customer = customerServiceImpl.customerList().getFirst();
+        CustomerDTO customer = customerServiceImpl.customerList().getFirst();
 
         mockMvc.perform(delete(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -77,23 +77,23 @@ public class CustomerControllerTest {
 
     @Test
     void updateCustomer() throws Exception {
-        Customer customer = customerServiceImpl.customerList().getFirst();
+        CustomerDTO customer = customerServiceImpl.customerList().getFirst();
 
         mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isNoContent());
-        verify(customerService).updateCustomerById(any(UUID.class), any(Customer.class));
+        verify(customerService).updateCustomerById(any(UUID.class), any(CustomerDTO.class));
     }
 
     @Test
     void createNewCustomer() throws Exception {
-        Customer customer = customerServiceImpl.customerList().getFirst();
+        CustomerDTO customer = customerServiceImpl.customerList().getFirst();
         customer.setVersion(null);
         customer.setId(null);
 
-        given(customerService.saveNewCustomer(any(Customer.class))).willReturn(customerServiceImpl.customerList().get(1));
+        given(customerService.saveNewCustomer(any(CustomerDTO.class))).willReturn(customerServiceImpl.customerList().get(1));
 
         mockMvc.perform(post(CustomerController.CUSTOMER_PATH)
                         .accept(MediaType.APPLICATION_JSON)
@@ -125,7 +125,7 @@ public class CustomerControllerTest {
 
     @Test
     void getCustomerById() throws Exception {
-        Customer testCustomer = customerServiceImpl.customerList().getFirst();
+        CustomerDTO testCustomer = customerServiceImpl.customerList().getFirst();
 
         given(customerService.getCustomerById(testCustomer.getId())).willReturn(Optional.of(testCustomer));
 

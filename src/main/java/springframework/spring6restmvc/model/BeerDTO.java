@@ -9,10 +9,10 @@ import java.util.UUID;
 
 @Builder
 @Data
-public class Beer {
+public class BeerDTO {
     private UUID id;
-    private Integer version;
     private String beerName;
+    private Integer version;
     private BeerStyle beerStyle;
     private String upc;
     private Integer quantityOnHand;
