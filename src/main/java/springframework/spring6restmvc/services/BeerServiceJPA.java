@@ -10,6 +10,7 @@ import springframework.spring6restmvc.repositories.BeerRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Primary
@@ -21,12 +22,18 @@ public class BeerServiceJPA implements BeerService {
 
     @Override
     public List<BeerDTO> beerList() {
-        return null;
+        return beerRepository.findAll()
+                .stream()//to change it from entity to DTO
+                .map(beerMapper::beerToBeerDto)
+                .collect(Collectors.toList());
+        //I don't have to return specific error like 404, if I find nothing, I just return an empty object,which is fine
     }
 
+    //but for getBeerById I need to return error if it's not found
     @Override
     public Optional<BeerDTO> getBeerById(UUID id) {
-        return Optional.empty();
+        return Optional.ofNullable(beerMapper.beerToBeerDto(beerRepository.findById(id)
+                .orElse(null)));
     }
 
     @Override

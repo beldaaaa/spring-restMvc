@@ -10,6 +10,7 @@ import springframework.spring6restmvc.repositories.CustomerRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Primary
@@ -21,12 +22,16 @@ public class CustomerServiceJPA implements CustomerService {
 
     @Override
     public List<CustomerDTO> customerList() {
-        return null;
+        return customerRepository.findAll()
+                .stream()
+                .map(customerMapper::customerToCustomerDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Optional<CustomerDTO> getCustomerById(UUID id) {
-        return Optional.empty();
+        return Optional.ofNullable(customerMapper.customerToCustomerDto(customerRepository.findById(id)
+                .orElse(null)));
     }
 
     @Override
