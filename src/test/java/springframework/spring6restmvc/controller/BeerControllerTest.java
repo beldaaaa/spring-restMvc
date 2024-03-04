@@ -44,7 +44,7 @@ class BeerControllerTest {
     BeerServiceImpl beerServiceImpl;
 
     @Captor
-    ArgumentCaptor<UUID> uuidArgumentCaptor;// to have a reusable component, which means I no longer need
+    ArgumentCaptor<UUID> uuidArgumentCaptor;// to have a reusable component, which means I no longer need a
     //declaration in delete test method
 
     @Captor
@@ -81,6 +81,8 @@ class BeerControllerTest {
     void deleteBeer() throws Exception {//delete operation is probably the simplest REST operation
         BeerDTO beer = beerServiceImpl.beerList().getFirst();
 
+        given(beerService.deleteById(any())).willReturn(true);//fix
+
         mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)//doesn't work without
@@ -102,6 +104,8 @@ class BeerControllerTest {
     void updateBeer() throws Exception {
         BeerDTO beer = beerServiceImpl.beerList().getFirst();//retrieves the first Beer object from the list of beers
         // returned by the beerList() method of beerServiceImpl
+
+        given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beer));//patch after implementing UPDATE IT
 
         mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
                         .accept(MediaType.APPLICATION_JSON)//sets the Accept header of the HTTP request to application/json,

@@ -3,8 +3,11 @@ package springframework.spring6restmvc.controller;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import springframework.spring6restmvc.entities.Beer;
+import springframework.spring6restmvc.mappers.BeerMapper;
 import springframework.spring6restmvc.model.BeerDTO;
 import springframework.spring6restmvc.repositories.BeerRepository;
 
@@ -16,10 +19,83 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest//this is complete test with full context
 class BeerControllerIT {//IT = integration test
+
     @Autowired
     BeerController beerController;
     @Autowired
     BeerRepository beerRepository;
+
+    //controller is dealing with DTOs and DB with entities
+    //=> use mapper to help with some conversions
+    @Autowired
+    BeerMapper beerMapper;
+
+    @Test
+    void deleteByIdNotFound() {
+        assertThrows(NotFoundException.class, () -> beerController.deleteById(UUID.randomUUID()));
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void deleteById() {
+        Beer beer = beerRepository.findAll().getFirst();
+
+        var responseEntity = beerController.deleteById(beer.getId());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
+        assertThat(beerRepository.findById(beer.getId()).isEmpty());
+
+    }
+
+    @Test
+    void updateBeerNotFound() {
+        assertThrows(NotFoundException.class, () ->
+                beerController.updateById(UUID.randomUUID(), BeerDTO.builder().build()));
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void updateBeerFound() {
+        Beer beer = beerRepository.findAll().getFirst();
+        BeerDTO beerDTO = beerMapper.beerToBeerDto(beer);
+        beerDTO.setId(null);
+        beerDTO.setVersion(null);
+        final String beerName = "updatovanePivo";
+        beerDTO.setBeerName(beerName);
+
+        var responseEntity = beerController.updateById(beer.getId(), beerDTO);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
+
+        Beer updatedBeer = beerRepository.findById(beer.getId()).get();
+        assertThat(updatedBeer.getBeerName()).isEqualTo(beerName);
+
+    }
+
+    @Rollback//to not interfere with any other test
+    @Transactional
+    @Test
+    void saveNewBeer() {
+        BeerDTO beerDTO = BeerDTO.builder()
+                .beerName("Policka")
+                .build();
+
+        var responseEntity = beerController.handlePost(beerDTO);
+        //it takes JSON object, parse it to a BeerDTO object and then SMVC calls controller method with populated DTO
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(201));
+        assertThat(responseEntity.getHeaders().getLocation()).isNotNull();
+
+        String[] locationUUID = responseEntity.getHeaders().getLocation().getPath().split("/");//to get URI
+        UUID savedUUID = UUID.fromString(locationUUID[4]);
+
+        Beer beer = beerRepository.findById(savedUUID).get();//now fetch the beer from the repository
+        assertThat(beer).isNotNull();
+        //in this test created BeerDTO passes through the controller, got persisted to the DB, and then I go outside
+        //the controller using the repository to enquire the DB again to verify that ID property returned by controller
+        //is really in the DB
+    }
 
 
     @Test

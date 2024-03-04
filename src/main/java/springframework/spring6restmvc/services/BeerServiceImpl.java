@@ -71,7 +71,7 @@ public class BeerServiceImpl implements BeerService {
 
     @Override
     public BeerDTO saveNewBeer(BeerDTO beer) {
-        BeerDTO savedBeer = BeerDTO.builder()//here we are again mimmicking what the persistent store is going to do here
+        BeerDTO savedBeer = BeerDTO.builder()//here we are again mimicking what the persistent store is going to do here
                 .id(UUID.randomUUID())
                 .createdData(LocalDateTime.now())
                 .updateData(LocalDateTime.now())
@@ -85,11 +85,11 @@ public class BeerServiceImpl implements BeerService {
         return savedBeer;
         //so this persistence method takes in the object that was created
         //I am assigning properties as if I was the DB, but I am taking from the object that I passed in the property
-        //and then I am persissting it to my map and then returning back the new saveBeer object
+        //,and then I am persisting it to my map and then returning back the new saveBeer object
     }
 
     @Override
-    public void updateBeerById(UUID beerId, BeerDTO beer) {
+    public Optional<BeerDTO> updateBeerById(UUID beerId, BeerDTO beer) {
         BeerDTO existing = beerMap.get(beerId);
         existing.setBeerName(beer.getBeerName());
         existing.setPrice(beer.getPrice());
@@ -97,11 +97,14 @@ public class BeerServiceImpl implements BeerService {
         existing.setQuantityOnHand(beer.getQuantityOnHand());
 
         beerMap.put(existing.getId(), existing);
+
+        return Optional.of(existing);
     }
 
     @Override
-    public void deleteById(UUID beerId) {
+    public Boolean deleteById(UUID beerId) {
         beerMap.remove(beerId);
+        return true;
     }
 
     @Override

@@ -29,9 +29,11 @@ public class BeerController {
     }
 
     @DeleteMapping(BEER_PATH_ID)
-    public ResponseEntity deleteById(@PathVariable("beerId") UUID beerId, @RequestBody BeerDTO beer) {
+    public ResponseEntity deleteById(@PathVariable("beerId") UUID beerId) {
 
-        beerService.deleteById(beerId);
+        if (!beerService.deleteById(beerId)) {
+            throw new NotFoundException();
+        }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -41,7 +43,9 @@ public class BeerController {
     @PutMapping(BEER_PATH_ID)
     public ResponseEntity updateById(@PathVariable("beerId") UUID beerId, @RequestBody BeerDTO beer) {
 
-        beerService.updateBeerById(beerId, beer);
+        if (beerService.updateBeerById(beerId, beer).isEmpty()) {
+            throw new NotFoundException();
+        }
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
@@ -57,7 +61,7 @@ public class BeerController {
         headers.add("Location", BEER_PATH + "/" + savedBeer.getId().toString());
         //when a client using the REST API creates a new beer object, it will get back the location of object, including UUID
 
-        return new ResponseEntity(HttpStatus.CREATED);//RE basically gives me the memory to one created for the status
+        return new ResponseEntity(headers, HttpStatus.CREATED);//RE basically gives me the memory to one created for the status
         //coming back, so I am saying that I want this to accept it
         //this is when we get 201 status about successfully save to my "DB"
     }
