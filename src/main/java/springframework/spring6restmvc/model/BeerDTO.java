@@ -1,5 +1,7 @@
 package springframework.spring6restmvc.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,8 +13,11 @@ import java.util.UUID;
 @Data
 public class BeerDTO {
     private UUID id;
-    private String beerName;
     private Integer version;
+
+    @NotBlank
+    @NotNull
+    private String beerName;
     private BeerStyle beerStyle;
     private String upc;
     private Integer quantityOnHand;

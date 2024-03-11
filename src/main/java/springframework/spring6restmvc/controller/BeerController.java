@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springframework.spring6restmvc.model.BeerDTO;
 import springframework.spring6restmvc.services.BeerService;
@@ -41,7 +42,7 @@ public class BeerController {
     //successful PUT in Postman is with "204 No Content"
     //http://localhost:8080/api/v1/customer/343894bb-2a27-42cf-95b6-1e1e70b2608a I have to add specific id for put request
     @PutMapping(BEER_PATH_ID)
-    public ResponseEntity updateById(@PathVariable("beerId") UUID beerId, @RequestBody BeerDTO beer) {
+    public ResponseEntity updateById(@PathVariable("beerId") UUID beerId, @Validated @RequestBody BeerDTO beer) {
 
         if (beerService.updateBeerById(beerId, beer).isEmpty()) {
             throw new NotFoundException();
@@ -53,8 +54,8 @@ public class BeerController {
     //adding POST operation to accept a new beer into my repository
     @PostMapping(BEER_PATH)//this is cleaner mapping
     //@RequestMapping(method = RequestMethod.POST)//this is second option
-    public ResponseEntity handlePost(@RequestBody BeerDTO beer) {//@RB annotation tells Spring to bind the JSON body to a Beer object
-
+    public ResponseEntity handlePost(@Validated @RequestBody BeerDTO beer) {//@RB annotation tells Spring to bind the JSON body to a Beer object
+//@Validated tells SpringMVC to go in DTO object must be valid according to validation constraints
         BeerDTO savedBeer = beerService.saveNewBeer(beer);//mimicking what persistence app would do but this example is without DB so...
 
         HttpHeaders headers = new HttpHeaders();
