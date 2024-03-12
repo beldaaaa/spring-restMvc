@@ -18,6 +18,7 @@ public class CustomerDTO {
     @NotBlank
     @NotNull
     private String customerName;
+    @NotNull
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 }

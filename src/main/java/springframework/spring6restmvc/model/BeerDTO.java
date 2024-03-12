@@ -18,9 +18,13 @@ public class BeerDTO {
     @NotBlank
     @NotNull
     private String beerName;
+    @NotNull
     private BeerStyle beerStyle;
-    private String upc;
-    private Integer quantityOnHand;
+    @NotNull
+    @NotBlank
+    private String upc;//annotation applies only on the following variable
+    private Integer quantityOnHand;//so it doesn't affect this one
+    @NotNull
     private BigDecimal price;
     private LocalDateTime createdData;
     private LocalDateTime updateData;
