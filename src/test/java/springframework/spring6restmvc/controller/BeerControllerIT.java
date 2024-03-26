@@ -80,7 +80,7 @@ beerMap.put("price",new BigDecimal("100"));
                 //=> error handler to handle this transaction system exception bubbling up from constraint/validation violation
                 //because DB max name length = 50 only
                 //=>add in another exception handler in CustomErrorController
-                .andExpect(jsonPath("$.length()", is(5)))
+                .andExpect(jsonPath("$.length()", is(4)))
                 .andReturn();
 
         System.out.println(mvcResult.getResponse().getContentAsString());

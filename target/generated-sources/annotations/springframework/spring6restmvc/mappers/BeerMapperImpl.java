@@ -7,7 +7,7 @@ import springframework.spring6restmvc.model.BeerDTO;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-25T13:22:51+0100",
+    date = "2024-03-26T20:45:30+0100",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Azul Systems, Inc.)"
 )
 @Component
