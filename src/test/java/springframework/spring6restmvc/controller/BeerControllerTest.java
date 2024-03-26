@@ -56,6 +56,7 @@ class BeerControllerTest {
         beerServiceImpl = new BeerServiceImpl();
     }
 
+
     @Test
     void updateBlankBeerName() throws Exception {
 

@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import springframework.spring6restmvc.model.BeerStyle;
 
 import java.math.BigDecimal;
@@ -21,9 +23,9 @@ public class Beer {
     @Id//mandatory
     @GeneratedValue(generator = "UUID")
     //@GenericGenerator(name = "UUID",strategy = "org.hibernate.id.UUIDGenerator")//this is out of JPA, it's done by Hibernate
-    @Column(length = 99, columnDefinition = "varchar", updatable = false, nullable = false)//some hints for Hibernate
+    @Column(length = 99, columnDefinition = "varchar(36)", updatable = false, nullable = false)//some hints for Hibernate
     // to know how to create the DB table when generating the SQL inside H2 in-memory DB
-
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
     @Version
 //mandatory, locking strategy used by Hibernate if version in DB is the same, if not - it will throw an exception

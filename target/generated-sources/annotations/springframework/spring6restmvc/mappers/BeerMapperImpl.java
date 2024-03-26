@@ -7,7 +7,7 @@ import springframework.spring6restmvc.model.BeerDTO;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-06T19:15:23+0100",
+    date = "2024-03-25T13:22:51+0100",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Azul Systems, Inc.)"
 )
 @Component
@@ -22,8 +22,8 @@ public class BeerMapperImpl implements BeerMapper {
         Beer.BeerBuilder beer = Beer.builder();
 
         beer.id( dto.getId() );
-        beer.beerName( dto.getBeerName() );
         beer.version( dto.getVersion() );
+        beer.beerName( dto.getBeerName() );
         beer.beerStyle( dto.getBeerStyle() );
         beer.upc( dto.getUpc() );
         beer.quantityOnHand( dto.getQuantityOnHand() );
@@ -43,8 +43,8 @@ public class BeerMapperImpl implements BeerMapper {
         BeerDTO.BeerDTOBuilder beerDTO = BeerDTO.builder();
 
         beerDTO.id( beer.getId() );
-        beerDTO.beerName( beer.getBeerName() );
         beerDTO.version( beer.getVersion() );
+        beerDTO.beerName( beer.getBeerName() );
         beerDTO.beerStyle( beer.getBeerStyle() );
         beerDTO.upc( beer.getUpc() );
         beerDTO.quantityOnHand( beer.getQuantityOnHand() );
