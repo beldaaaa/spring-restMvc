@@ -179,7 +179,7 @@ beerMap.put("price",new BigDecimal("100"));
     void listBeers() {
         List<BeerDTO> beerDTOList = beerController.beerList();
 
-        assertThat(beerDTOList.size()).isEqualTo(3);
+        assertThat(beerDTOList.size()).isEqualTo(2413);
     }
 
     @Transactional
