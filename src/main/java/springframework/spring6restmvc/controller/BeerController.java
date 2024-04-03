@@ -70,8 +70,8 @@ public class BeerController {
     @GetMapping(BEER_PATH)//maps the path API of one beer to the list of beers
     //so when request comes in, I invoke my service to get the list of beers and that is returned back
     //to the view handler, which in this case is going to be Jackson to produce the JSON response
-    public List<BeerDTO> beerList() {
-        return beerService.beerList();
+    public List<BeerDTO> beerList(@RequestParam(required = false) String beerName) {//Request and required is do to compatibility with BeerIT
+        return beerService.beerList(beerName);
     }
 
     @GetMapping(BEER_PATH_ID)

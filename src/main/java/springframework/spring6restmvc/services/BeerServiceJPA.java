@@ -3,6 +3,8 @@ package springframework.spring6restmvc.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import springframework.spring6restmvc.entities.Beer;
 import springframework.spring6restmvc.mappers.BeerMapper;
 import springframework.spring6restmvc.model.BeerDTO;
 import springframework.spring6restmvc.repositories.BeerRepository;
@@ -22,12 +24,23 @@ public class BeerServiceJPA implements BeerService {
     private final BeerMapper beerMapper;
 
     @Override
-    public List<BeerDTO> beerList() {
-        return beerRepository.findAll()
-                .stream()//to change it from entity to DTO
+    public List<BeerDTO> beerList(String beerName) {
+
+        List<Beer> beerList;
+
+        if (StringUtils.hasText(beerName)) {
+            beerList = listBeerByName(beerName);
+        } else {
+            beerList = beerRepository.findAll();
+        }
+
+        return beerList.stream()
                 .map(beerMapper::beerToBeerDto)
                 .collect(Collectors.toList());
-        //I don't have to return specific error like 404, if I find nothing, I just return an empty object,which is fine
+    }
+
+    List<Beer> listBeerByName(String beerName) {
+        return beerRepository.findAllByBeerName("%"+beerName+"%");//returns a list of the beer entity objets + wildcard search characters for SQL again
     }
 
     //but for getBeerById I need to return error if it's not found

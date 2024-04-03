@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BeerService {
-    List<BeerDTO> beerList();
+    List<BeerDTO> beerList(String beerName);
 
     Optional<BeerDTO> getBeerById(UUID id);
 

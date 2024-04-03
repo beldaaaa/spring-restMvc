@@ -27,6 +27,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,6 +64,14 @@ class BeerControllerIT {//IT = integration test
     //so this is focused on JPA layer
     //instead of using MockMVC I want to test constraint violation coming up from the DB in JPA layer
     //I need to use MockMVC slightly differently (hold of the WebApplicationContext) and init it in setup method
+
+    @Test
+    void listBeersByName() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                .queryParam("beerName","IPA"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()",is(2412)));
+    }
 
     @Test
     void patchBadBeerName() throws Exception {
@@ -177,7 +186,7 @@ beerMap.put("price",new BigDecimal("100"));
     // I am not looking for web context. I am looking at testing the interaction of the controller with underlying service
     @Test
     void listBeers() {
-        List<BeerDTO> beerDTOList = beerController.beerList();
+        List<BeerDTO> beerDTOList = beerController.beerList(null);
 
         assertThat(beerDTOList.size()).isEqualTo(2413);
     }
@@ -189,7 +198,7 @@ beerMap.put("price",new BigDecimal("100"));
         //to do a rollback, usually it would automatically do, but not with controller layer
         //test splices would make it only for this test, so it would not influence any other test
         // => solution is to use @Transaction
-        List<BeerDTO> beerDTOList = beerController.beerList();
+        List<BeerDTO> beerDTOList = beerController.beerList(null);
 
         assertThat(beerDTOList.size()).isEqualTo(0);
     }
