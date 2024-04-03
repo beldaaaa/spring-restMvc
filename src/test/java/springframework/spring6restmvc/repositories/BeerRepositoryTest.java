@@ -24,9 +24,9 @@ class BeerRepositoryTest {
 
     @Test
     void getBeerListByName() {
-        List<Beer> list = beerRepository.findAllByBeerName("%IPA%");//wildcard to find anything including IPA string
+        List<Beer> list = beerRepository.findAllByBeerNameIsLikeIgnoreCase("%IPA%");//wildcard to find anything including IPA string
 
-        assertThat(list.size()).isEqualTo(222);
+        assertThat(list.size()).isEqualTo(336);
     }
 
     @Test

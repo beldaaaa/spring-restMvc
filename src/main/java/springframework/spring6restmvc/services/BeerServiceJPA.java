@@ -40,7 +40,7 @@ public class BeerServiceJPA implements BeerService {
     }
 
     List<Beer> listBeerByName(String beerName) {
-        return beerRepository.findAllByBeerName("%"+beerName+"%");//returns a list of the beer entity objets + wildcard search characters for SQL again
+        return beerRepository.findAllByBeerNameIsLikeIgnoreCase("%"+beerName+"%");//returns a list of the beer entity objets + wildcard search characters for SQL again
     }
 
     //but for getBeerById I need to return error if it's not found

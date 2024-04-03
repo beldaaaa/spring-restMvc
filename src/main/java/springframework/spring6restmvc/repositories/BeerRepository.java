@@ -9,5 +9,5 @@ import java.util.UUID;
 public interface BeerRepository extends JpaRepository<Beer, UUID> {
     //JpaRepository is useful for findAll,saveAll, saveAndFlush,...
 
-    List<Beer> findAllByBeerName(String beerName);
+    List<Beer> findAllByBeerNameIsLikeIgnoreCase(String beerName);
 }

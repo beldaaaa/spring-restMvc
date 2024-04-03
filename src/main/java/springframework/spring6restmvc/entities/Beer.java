@@ -24,7 +24,7 @@ import java.util.UUID;
 public class Beer {
     @Id//mandatory
     @GeneratedValue(generator = "UUID")
-    //@GenericGenerator(name = "UUID",strategy = "org.hibernate.id.UUIDGenerator")//this is out of JPA, it's done by Hibernate
+   // @GenericGenerator(name = "UUID",strategy = "org.hibernate.id.UUIDGenerator")//this is out of JPA, it's done by Hibernate
     @Column(length = 99, columnDefinition = "varchar(36)", updatable = false, nullable = false)//some hints for Hibernate
     // to know how to create the DB table when generating the SQL inside H2 in-memory DB
     @JdbcTypeCode(SqlTypes.CHAR)
@@ -41,6 +41,7 @@ public class Beer {
     // to my service layer and ultimately to the web layer, so it is much more preferable to handle it through a
     // bean validation constraint)
     //generally it is good to have here validation constraints matching DB validation constraints
+    @Column(length = 50)
     private String beerName;
     @NotNull
     private BeerStyle beerStyle;
