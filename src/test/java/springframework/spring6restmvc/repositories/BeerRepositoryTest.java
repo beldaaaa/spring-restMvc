@@ -4,13 +4,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
 import springframework.spring6restmvc.bootstrap.BootStrapData;
 import springframework.spring6restmvc.entities.Beer;
 import springframework.spring6restmvc.model.BeerStyle;
 import springframework.spring6restmvc.services.BeerCsvServiceImpl;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,9 +24,9 @@ class BeerRepositoryTest {
 
     @Test
     void getBeerListByName() {
-        List<Beer> list = beerRepository.findAllByBeerNameIsLikeIgnoreCase("%IPA%");//wildcard to find anything including IPA string
+        Page<Beer> page = beerRepository.findAllByBeerNameIsLikeIgnoreCase("%IPA%", null);//wildcard to find anything including IPA string
 
-        assertThat(list.size()).isEqualTo(336);
+        assertThat(page.getContent().size()).isEqualTo(336);
     }
 
     @Test

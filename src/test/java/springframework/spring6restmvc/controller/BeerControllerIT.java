@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
@@ -22,7 +23,6 @@ import springframework.spring6restmvc.repositories.BeerRepository;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -74,10 +74,10 @@ class BeerControllerIT {//IT = integration test
                         .queryParam("beerStyle", BeerStyle.IPA.name())
                         .queryParam("showInventory", "true")
                         .queryParam("pageNumber", "2")
-                        .queryParam("pageSize", "20"))
+                        .queryParam("pageSize", "50"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(50)))
-                .andExpect(jsonPath("$.[0].quantityOnHand").value(IsNull.notNullValue()));
+                .andExpect(jsonPath("$.content.size()", is(50)))
+                .andExpect(jsonPath("$.content[0].quantityOnHand").value(IsNull.notNullValue()));
     }
 
     @Test
@@ -85,10 +85,11 @@ class BeerControllerIT {//IT = integration test
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .queryParam("beerName", "IPA")
                         .queryParam("beerStyle", BeerStyle.IPA.name())
-                        .queryParam("showInventory", "FALSE")
+                        .queryParam("showInventory", "false")
+                        .queryParam("pageSize", "600")
                 ).andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(310)))
-                .andExpect(jsonPath("$.[0].quantityOnHand").value(IsNull.notNullValue()));
+                .andExpect(jsonPath("$.content.size()", is(310)))
+                .andExpect(jsonPath("$.content[0].quantityOnHand").value(IsNull.nullValue()));
     }
 
     @Test
@@ -96,24 +97,27 @@ class BeerControllerIT {//IT = integration test
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .queryParam("beerName", "IPA")
                         .queryParam("beerStyle", BeerStyle.IPA.name())
+                        .queryParam("pageSize", "800")
                 ).andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(310)));
+                .andExpect(jsonPath("$.content.size()", is(310)));
     }
 
     @Test
     void listBeersByStyle() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH)
-                        .queryParam("beerStyle", BeerStyle.IPA.name()))
+                        .queryParam("beerStyle", BeerStyle.IPA.name())
+                        .queryParam("pageSize", "800"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(548)));
+                .andExpect(jsonPath("$.content.size()", is(548)));
     }
 
     @Test
     void listBeersByName() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH)
-                        .queryParam("beerName", "IPA"))
+                        .queryParam("beerName", "IPA")
+                        .queryParam("pageSize", "800"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(336)));
+                .andExpect(jsonPath("$.content.size()", is(336)));
     }
 
     @Test
@@ -229,10 +233,10 @@ class BeerControllerIT {//IT = integration test
     // I am not looking for web context. I am looking at testing the interaction of the controller with underlying service
     @Test
     void listBeers() {
-        List<BeerDTO> beerDTOList = beerController.beerList(null, null, false, 1, 22);
+        Page<BeerDTO> beerDTOList = beerController.beerPage(null, null, false, 1, 2413);
 
 
-        assertThat(beerDTOList.size()).isEqualTo(2413);
+        assertThat(beerDTOList.getContent().size()).isEqualTo(1000);
     }
 
     @Transactional
@@ -242,8 +246,8 @@ class BeerControllerIT {//IT = integration test
         //to do a rollback, usually it would automatically do, but not with controller layer
         //test splices would make it only for this test, so it would not influence any other test
         // => solution is to use @Transaction
-        List<BeerDTO> beerDTOList = beerController.beerList(null, null, false, 1, 22);
+        Page<BeerDTO> beerDTOList = beerController.beerPage(null, null, false, 1, 25);
 
-        assertThat(beerDTOList.size()).isEqualTo(0);
+        assertThat(beerDTOList.getContent().size()).isEqualTo(0);
     }
 }

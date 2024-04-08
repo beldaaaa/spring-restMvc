@@ -2,6 +2,7 @@ package springframework.spring6restmvc.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,6 @@ import springframework.spring6restmvc.model.BeerDTO;
 import springframework.spring6restmvc.model.BeerStyle;
 import springframework.spring6restmvc.services.BeerService;
 
-import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -71,9 +71,13 @@ public class BeerController {
     @GetMapping(BEER_PATH)//maps the path API of one beer to the list of beers
     //so when request comes in, I invoke my service to get the list of beers and that is returned back
     //to the view handler, which in this case is going to be Jackson to produce the JSON response
-    public List<BeerDTO> beerList(@RequestParam(required = false) String beerName, @RequestParam(required = false) BeerStyle beerStyle, @RequestParam(required = false) Boolean showInventory, @RequestParam(required = false) Integer pageNumber, @RequestParam(required = false) Integer pageSize) {
+    public Page<BeerDTO> beerPage(@RequestParam(required = false) String beerName,
+                                  @RequestParam(required = false) BeerStyle beerStyle,
+                                  @RequestParam(required = false) Boolean showInventory,
+                                  @RequestParam(required = false) Integer pageNumber,
+                                  @RequestParam(required = false) Integer pageSize) {
         //Request and required is do to compatibility with BeerIT
-        return beerService.beerList(beerName, beerStyle, showInventory, pageNumber, pageSize);
+        return beerService.beerPage(beerName, beerStyle, showInventory, pageNumber, pageSize);
     }
 
     @GetMapping(BEER_PATH_ID)

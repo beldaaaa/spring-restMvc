@@ -2,7 +2,10 @@ package springframework.spring6restmvc.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import springframework.spring6restmvc.entities.Beer;
@@ -11,11 +14,9 @@ import springframework.spring6restmvc.model.BeerDTO;
 import springframework.spring6restmvc.model.BeerStyle;
 import springframework.spring6restmvc.repositories.BeerRepository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 @Service
 @Primary
@@ -29,24 +30,27 @@ public class BeerServiceJPA implements BeerService {
     private static final int DEFAULT_PAGE_SIZE = 25;
 
     @Override
-    public List<BeerDTO> beerList(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize) {
+    public Page<BeerDTO> beerPage(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize) {
 
         PageRequest pageRequest = buildPagerequest(pageNumber, pageSize);
 
-        List<Beer> beerList;
+        Page<Beer> beerPage;
 
         if (StringUtils.hasText(beerName) && beerStyle == null) {
-            beerList = listBeerByName(beerName);
+            beerPage = pageBeerByName(beerName, pageRequest);
         } else if (!StringUtils.hasText(beerName) && beerStyle != null) {
-            beerList = listBeerByStyle(beerStyle);
+            beerPage = pageBeerByStyle(beerStyle, pageRequest);
         } else if (StringUtils.hasText(beerName) && beerStyle != null) {
-            beerList = listBeerByNameAndStyle(beerName, beerStyle);
+            beerPage = pageBeerByNameAndStyle(beerName, beerStyle, pageRequest);
         } else {
-            beerList = beerRepository.findAll();
+            beerPage = beerRepository.findAll(pageRequest);
         }
-        return beerList.stream()
-                .map(beerMapper::beerToBeerDto)
-                .collect(Collectors.toList());
+
+        if (showInventory != null && !showInventory) {
+            beerPage.forEach(beer -> beer.setQuantityOnHand(null));
+        }
+
+        return beerPage.map(beerMapper::beerToBeerDto);
     }
 
     public PageRequest buildPagerequest(Integer pageNumber, Integer pageSize) {
@@ -68,22 +72,25 @@ public class BeerServiceJPA implements BeerService {
                 queryPageSize = pageSize;
             }
         }
+        Sort sort = Sort.by(Sort.Order.asc("beerName"));
+
         //most of the time I would use Sort parameter in PageRequest, but I don't have sorting yet, so I will use the first one
-        return PageRequest.of(queryPageNumber, queryPageSize);
+        return PageRequest.of(queryPageNumber, queryPageSize, sort);
     }
 
-    List<Beer> listBeerByNameAndStyle(String beerName, BeerStyle beerStyle) {
-        return beerRepository.findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle("%" + beerName + "%", beerStyle);
+    Page<Beer> pageBeerByNameAndStyle(String beerName, BeerStyle beerStyle, Pageable pageable) {
+        return beerRepository.findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle("%" + beerName + "%",
+                beerStyle, pageable);
     }
 
-    List<Beer> listBeerByName(String beerName) {
+    Page<Beer> pageBeerByName(String beerName, Pageable pageable) {
         //returns a list of the beer entity objets (and that will get assigned the beerList)
         // + wildcard search characters for SQL again
-        return beerRepository.findAllByBeerNameIsLikeIgnoreCase("%" + beerName + "%");
+        return beerRepository.findAllByBeerNameIsLikeIgnoreCase("%" + beerName + "%", pageable);
     }
 
-    List<Beer> listBeerByStyle(BeerStyle beerStyle) {
-        return beerRepository.findAllByBeerStyle(beerStyle);
+    Page<Beer> pageBeerByStyle(BeerStyle beerStyle, Pageable pageable) {
+        return beerRepository.findAllByBeerStyle(beerStyle, pageable);
     }
 
     //but for getBeerById I need to return error if it's not found

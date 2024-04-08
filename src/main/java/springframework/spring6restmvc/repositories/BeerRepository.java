@@ -1,20 +1,21 @@
 package springframework.spring6restmvc.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import springframework.spring6restmvc.entities.Beer;
 import springframework.spring6restmvc.model.BeerStyle;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface BeerRepository extends JpaRepository<Beer, UUID> {
     //JpaRepository is useful for findAll,saveAll, saveAndFlush,...
 
-    List<Beer> findAllByBeerNameIsLikeIgnoreCase(String beerName);
+    Page<Beer> findAllByBeerNameIsLikeIgnoreCase(String beerName, Pageable pageable);
 
-    List<Beer> findAllByBeerStyle(BeerStyle beerStyle);
+    Page<Beer> findAllByBeerStyle(BeerStyle beerStyle, Pageable pageable);
 
-    List<Beer> findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle(String beerName, BeerStyle beerStyle);
+    Page<Beer> findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle(String beerName, BeerStyle beerStyle, Pageable pageable);
 
-   // List<Beer> findAllByBeerNameIsLikeIgnoreCaseAndBeerStyleAndShowInventory(String beerName, BeerStyle beerStyle, Boolean showInventory);
+    // List<Beer> findAllByBeerNameIsLikeIgnoreCaseAndBeerStyleAndShowInventory(String beerName, BeerStyle beerStyle, Boolean showInventory);
 }
