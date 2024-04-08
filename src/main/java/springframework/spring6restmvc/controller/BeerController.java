@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springframework.spring6restmvc.model.BeerDTO;
+import springframework.spring6restmvc.model.BeerStyle;
 import springframework.spring6restmvc.services.BeerService;
 
 import java.util.List;
@@ -70,8 +71,9 @@ public class BeerController {
     @GetMapping(BEER_PATH)//maps the path API of one beer to the list of beers
     //so when request comes in, I invoke my service to get the list of beers and that is returned back
     //to the view handler, which in this case is going to be Jackson to produce the JSON response
-    public List<BeerDTO> beerList(@RequestParam(required = false) String beerName) {//Request and required is do to compatibility with BeerIT
-        return beerService.beerList(beerName);
+    public List<BeerDTO> beerList(@RequestParam(required = false) String beerName, @RequestParam(required = false) BeerStyle beerStyle, @RequestParam(required = false) Boolean showInventory, @RequestParam(required = false) Integer pageNumber, @RequestParam(required = false) Integer pageSize) {
+        //Request and required is do to compatibility with BeerIT
+        return beerService.beerList(beerName, beerStyle, showInventory, pageNumber, pageSize);
     }
 
     @GetMapping(BEER_PATH_ID)

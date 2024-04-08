@@ -1,6 +1,7 @@
 package springframework.spring6restmvc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import springframework.spring6restmvc.entities.Beer;
 import springframework.spring6restmvc.mappers.BeerMapper;
 import springframework.spring6restmvc.model.BeerDTO;
+import springframework.spring6restmvc.model.BeerStyle;
 import springframework.spring6restmvc.repositories.BeerRepository;
 
 import java.math.BigDecimal;
@@ -66,11 +68,52 @@ class BeerControllerIT {//IT = integration test
     //I need to use MockMVC slightly differently (hold of the WebApplicationContext) and init it in setup method
 
     @Test
+    void listBeersByNameAndStyleShowInventoryTruePage2() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerName", "IPA")
+                        .queryParam("beerStyle", BeerStyle.IPA.name())
+                        .queryParam("showInventory", "true")
+                        .queryParam("pageNumber", "2")
+                        .queryParam("pageSize", "20"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(50)))
+                .andExpect(jsonPath("$.[0].quantityOnHand").value(IsNull.notNullValue()));
+    }
+
+    @Test
+    void listBeersByNameStyleShowInventoryFalse() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerName", "IPA")
+                        .queryParam("beerStyle", BeerStyle.IPA.name())
+                        .queryParam("showInventory", "FALSE")
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(310)))
+                .andExpect(jsonPath("$.[0].quantityOnHand").value(IsNull.notNullValue()));
+    }
+
+    @Test
+    void listBeersByNameAndStyle() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerName", "IPA")
+                        .queryParam("beerStyle", BeerStyle.IPA.name())
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(310)));
+    }
+
+    @Test
+    void listBeersByStyle() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerStyle", BeerStyle.IPA.name()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(548)));
+    }
+
+    @Test
     void listBeersByName() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH)
-                .queryParam("beerName","IPA"))
+                        .queryParam("beerName", "IPA"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()",is(336)));
+                .andExpect(jsonPath("$.size()", is(336)));
     }
 
     @Test
@@ -78,7 +121,7 @@ class BeerControllerIT {//IT = integration test
         Beer beer = beerRepository.findAll().getFirst();//Get an existing beer from the DB
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "NewName6546851246512468552616716462168271687216572165415642165416545621657216576542176256825878651467154157617621515646524213");
-beerMap.put("price",new BigDecimal("100"));
+        beerMap.put("price", new BigDecimal("100"));
         MvcResult mvcResult = mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -186,7 +229,8 @@ beerMap.put("price",new BigDecimal("100"));
     // I am not looking for web context. I am looking at testing the interaction of the controller with underlying service
     @Test
     void listBeers() {
-        List<BeerDTO> beerDTOList = beerController.beerList(null);
+        List<BeerDTO> beerDTOList = beerController.beerList(null, null, false, 1, 22);
+
 
         assertThat(beerDTOList.size()).isEqualTo(2413);
     }
@@ -198,7 +242,7 @@ beerMap.put("price",new BigDecimal("100"));
         //to do a rollback, usually it would automatically do, but not with controller layer
         //test splices would make it only for this test, so it would not influence any other test
         // => solution is to use @Transaction
-        List<BeerDTO> beerDTOList = beerController.beerList(null);
+        List<BeerDTO> beerDTOList = beerController.beerList(null, null, false, 1, 22);
 
         assertThat(beerDTOList.size()).isEqualTo(0);
     }
