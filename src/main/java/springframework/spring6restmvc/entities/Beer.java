@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
@@ -24,8 +25,10 @@ import java.util.UUID;
 public class Beer {
     @Id//mandatory
     @GeneratedValue(generator = "UUID")
-   // @GenericGenerator(name = "UUID",strategy = "org.hibernate.id.UUIDGenerator")//this is out of JPA, it's done by Hibernate
-    @Column(length = 99, columnDefinition = "varchar(36)", updatable = false, nullable = false)//some hints for Hibernate
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+//this is out of JPA, it's done by Hibernate
+    @Column(length = 99, columnDefinition = "varchar(36)", updatable = false, nullable = false)
+//some hints for Hibernate
     // to know how to create the DB table when generating the SQL inside H2 in-memory DB
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
@@ -52,7 +55,7 @@ public class Beer {
     @NotNull
     private BigDecimal price;
     @CreationTimestamp//those 2 annotations are Hibernate specific, not JPA
-    private LocalDateTime createdData;
+    private LocalDateTime createdDate;
     @UpdateTimestamp
-    private LocalDateTime updateData;
+    private LocalDateTime lastModifiedDate;
 }

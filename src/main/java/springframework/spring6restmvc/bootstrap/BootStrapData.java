@@ -76,8 +76,8 @@ public class BootStrapData implements CommandLineRunner {
                     .upc("456")
                     .price(new BigDecimal("25.90"))
                     .quantityOnHand(40)
-                    .createdData(LocalDateTime.now())
-                    .updateData(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now())
+                    .lastModifiedDate(LocalDateTime.now())
                     .build();
             Beer beer2 = Beer.builder()
                     .beerName("10")
@@ -85,8 +85,8 @@ public class BootStrapData implements CommandLineRunner {
                     .upc("444")
                     .price(new BigDecimal("12.90"))
                     .quantityOnHand(120)
-                    .createdData(LocalDateTime.now())
-                    .updateData(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now())
+                    .lastModifiedDate(LocalDateTime.now())
                     .build();
             Beer beer3 = Beer.builder()
                     .beerName("1000")
@@ -94,8 +94,8 @@ public class BootStrapData implements CommandLineRunner {
                     .upc("99")
                     .price(new BigDecimal("50.90"))
                     .quantityOnHand(12)
-                    .createdData(LocalDateTime.now())
-                    .updateData(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now())
+                    .lastModifiedDate(LocalDateTime.now())
                     .build();
 
             beerRepository.saveAll(Arrays.asList(beer1, beer2, beer3));
