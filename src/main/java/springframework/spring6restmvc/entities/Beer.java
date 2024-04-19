@@ -14,6 +14,7 @@ import springframework.spring6restmvc.model.BeerStyle;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Builder
@@ -54,8 +55,26 @@ public class Beer {
     private Integer quantityOnHand;
     @NotNull
     private BigDecimal price;
-    @CreationTimestamp//those 2 annotations are Hibernate specific, not JPA
+    @OneToMany(mappedBy = "beer")
+    private Set<BeerOrderLine> orderLines;
+
+    @ManyToMany
+    @JoinTable(name = "beer_category", joinColumns = @JoinColumn(name = "beer_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories;
+
+    public void addCategory(Category category) {
+        this.categories.add(category);
+        category.getBeers().add(this);//to keep bidirectional relationship
+    }
+    public void removeCategory(Category category) {
+        this.categories.remove(category);
+        category.getBeers().remove(category);
+    }
+
+    @CreationTimestamp
     private LocalDateTime createdDate;
     @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
+
 }

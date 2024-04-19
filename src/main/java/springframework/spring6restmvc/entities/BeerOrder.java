@@ -1,7 +1,10 @@
 package springframework.spring6restmvc.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -9,15 +12,26 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.sql.Timestamp;
+import java.util.Set;
 import java.util.UUID;
 
 @Builder
 @Getter
 @Setter
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class BeerOrder {
+    public BeerOrder(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate, String customerRef, Customer customer, Set<BeerOrderLine> beerOrderLines, BeerOrderShipment beerOrderShipment) {
+        this.id = id;
+        this.version = version;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
+        this.customerRef = customerRef;
+        this.setCustomer(customer);//when builder makes an action this allArgsCtor is called and the setCustomer is utilized
+        this.beerOrderLines = beerOrderLines;
+        this.setBeerOrderShipment(beerOrderShipment);
+    }
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -44,4 +58,23 @@ public class BeerOrder {
 
     @ManyToOne
     private Customer customer;
+
+    //to override what was Lombok providing (helper method)
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+        customer.getBeerOrders().add(this);
+    }
+
+    public void setBeerOrderShipment(BeerOrderShipment beerOrderShipment) {
+        this.beerOrderShipment = beerOrderShipment;
+        beerOrderShipment.setBeerOrder(this);
+    }
+
+    @OneToMany(mappedBy = "beerOrder")
+    private Set<BeerOrderLine> beerOrderLines;
+
+    @OneToOne(cascade = CascadeType.PERSIST)//tells Hibernate to save that object
+    //Whenever I save a beer order object, the beer order shipment object will also get update to the DB
+    //(Hibernate manages these properties and I don't have to code it)
+    private BeerOrderShipment beerOrderShipment;
 }
