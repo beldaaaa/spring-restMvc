@@ -74,7 +74,6 @@ public class BeerServiceJPA implements BeerService {
         }
         Sort sort = Sort.by(Sort.Order.asc("beerName"));
 
-        //most of the time I would use Sort parameter in PageRequest, but I don't have sorting yet, so I will use the first one
         return PageRequest.of(queryPageNumber, queryPageSize, sort);
     }
 
@@ -84,7 +83,7 @@ public class BeerServiceJPA implements BeerService {
     }
 
     Page<Beer> pageBeerByName(String beerName, Pageable pageable) {
-        //returns a list of the beer entity objets (and that will get assigned the beerList)
+        //returns a list of the beer entity objects (and that will get assigned the beerList)
         // + wildcard search characters for SQL again
         return beerRepository.findAllByBeerNameIsLikeIgnoreCase("%" + beerName + "%", pageable);
     }
@@ -113,7 +112,7 @@ public class BeerServiceJPA implements BeerService {
             foundBeer.setBeerStyle(beer.getBeerStyle());
             foundBeer.setPrice(beer.getPrice());
             foundBeer.setUpc(beer.getUpc());
-            //beerRepository.save(foundBeer);
+            foundBeer.setVersion(beer.getVersion());
             atomicReference.set(Optional.of(beerMapper
                     .beerToBeerDto(beerRepository.save(foundBeer))));
         }, () -> atomicReference.set(Optional.empty()));
@@ -138,7 +137,6 @@ public class BeerServiceJPA implements BeerService {
             foundBeer.setPrice(beer.getPrice());
             foundBeer.setUpc(beer.getUpc());
             foundBeer.setQuantityOnHand(beer.getQuantityOnHand());
-            //beerRepository.save(foundBeer);
             atomicReference.set(Optional.of(beerMapper
                     .beerToBeerDto(beerRepository.save(foundBeer))));
         }, () -> atomicReference.set(Optional.empty()));

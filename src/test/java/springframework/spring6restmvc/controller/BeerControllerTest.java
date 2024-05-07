@@ -28,17 +28,14 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//Why use Spring MockMVC?
-//Spring MockMVC allows you to test the controller interactions in a servlet context
+//Spring MockMVC allows to test the controller interactions in a servlet context
 //without the application running in an application server.
 @WebMvcTest(BeerController.class)//I want to limit this to BeerController class
 class BeerControllerTest {
 
     @Autowired
-    MockMvc mockMvc;//Now I want to bring in a dependency of autowired on MockMvc
-    @MockBean//tells Mockito to provide mock of this into the Spring context
-    //without this mock bean I would get an exception saying that I don't have that dependency there,
-    //and I would have to provide it manually
+    MockMvc mockMvc;
+    @MockBean
     BeerService beerService;
     @Autowired
     ObjectMapper objectMapper;
@@ -93,7 +90,8 @@ class BeerControllerTest {
 
     @Test
     void patchBeer() throws Exception {
-        BeerDTO beer = beerServiceImpl.beerPage(null, null, null, null, null).getContent().getFirst();//to give my request a body (JSON of the beer map object)
+        //to give my request a body (JSON of the beer map object)
+        BeerDTO beer = beerServiceImpl.beerPage(null, null, null, null, null).getContent().getFirst();
         //a little change: I don't need to give it a fully qualified object,
         //so I can just create a map for Jackson (put key becomes the JSON property)
         Map<String, Object> beerMap = new HashMap<>();
@@ -114,20 +112,16 @@ class BeerControllerTest {
     }
 
     @Test
-    void deleteBeer() throws Exception {//delete operation is probably the simplest REST operation
+    void deleteBeer() throws Exception {
         BeerDTO beer = beerServiceImpl.beerPage(null, null, null, null, null).getContent().getFirst();
 
         given(beerService.deleteById(any())).willReturn(true);//fix
 
         mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)//doesn't work without
-                        .content(objectMapper.writeValueAsString(beer)))//those 2 lines (but it should?)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isNoContent());
-//commented after ArgumentCaptor was defined above;
-        //ArgumentCaptor<UUID> uuidArgumentCaptor = ArgumentCaptor.forClass(UUID.class);//argument captor
-        //created as Mockito class
-        //Using argument captor can compare the beer's id is equal to the one that is passed as a parameter to the URL.
         verify(beerService).deleteById(uuidArgumentCaptor.capture());//sit on that mock and listen for anything what is passed in
         //and ensure to pass proper UUID value
         assertThat(beer.getId()).isEqualTo(uuidArgumentCaptor.getValue());//now with the value I can run assertions on it
@@ -138,10 +132,9 @@ class BeerControllerTest {
 
     @Test
     void updateBeer() throws Exception {
-        BeerDTO beer = beerServiceImpl.beerPage(null, null, null, null, null).getContent().getFirst();//retrieves the first Beer object from the list of beers
-        // returned by the beerList() method of beerServiceImpl
+        BeerDTO beer = beerServiceImpl.beerPage(null, null, null, null, null).getContent().getFirst();
 
-        given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beer));//patch after implementing UPDATE IT
+        given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beer));
 
         mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
                         .accept(MediaType.APPLICATION_JSON)//sets the Accept header of the HTTP request to application/json,
@@ -151,7 +144,7 @@ class BeerControllerTest {
                         .content(objectMapper.writeValueAsString(beer)))//object to convert POJO to JSON representation
                 //(converts the beer object to a JSON string and includes it in the body of the HTTP request)
                 .andExpect(status().isNoContent());//assertion
-        verify(beerService).updateBeerById(any(UUID.class), any(BeerDTO.class));//argument captor is used here (more later)
+        verify(beerService).updateBeerById(any(UUID.class), any(BeerDTO.class));
     }
 
     @Test
@@ -184,11 +177,10 @@ class BeerControllerTest {
         // So I get the testBeer object from the service implementation and then tell Mockito to return it
         mockMvc.perform(get(BeerController.BEER_PATH_ID, testBeer.getId())//I want ot perform get against URL
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())//and I should get back an OK status
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(testBeer.getId().toString())))
                 .andExpect(jsonPath("$.beerName", is(testBeer.getBeerName())));
-        //this gets a beer object to return from my Mock MVC controller
     }
 
     @Test
@@ -206,5 +198,4 @@ class BeerControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
     }
-
 }

@@ -107,7 +107,6 @@ public class CustomerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isCreated());
-//                .andExpect(header().exists("Location"));//doesn't work
     }
 
     @Test

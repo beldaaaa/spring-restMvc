@@ -47,13 +47,12 @@ class BeerOrderRepositoryTest {
                 .build();
 //after persistence operations I want to get the object being returned from the repository
         BeerOrder savedOrder = orderRepository.save(beerOrder);
-        //added "...AndFlush" that tells Hibernate to persist this to the DB immediately and Hibernate will look int the DB
+        //with "...AndFlush" that tells Hibernate to persist this to the DB immediately and Hibernate will look int the DB
         //for the relationship of customer and beerOrders
         //=>in savedOrder-customer-beerOrders-0-id is reference to the beer order
 
-        //on the other and saveAndFlush can cause a performance issue since it tells Hibernate to put everything in the DB
+        //on the other hand saveAndFlush can cause a performance issue since it tells Hibernate to put everything in the DB
         System.out.printf(beerOrder.getCustomerRef());
 
     }
-
 }

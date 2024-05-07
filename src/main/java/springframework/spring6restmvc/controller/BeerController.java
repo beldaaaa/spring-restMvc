@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
-@RestController//Rest => Spring now knows it has to return back proper response body (JSON and not HTML)
+@RestController//Rest => Spring now knows it has to return proper response body (JSON and not HTML)
 public class BeerController {
     private final BeerService beerService;
     static final String BEER_PATH = "/api/v1/beer";
@@ -40,7 +40,6 @@ public class BeerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //successful PUT in Postman is with "204 No Content"
     //http://localhost:8080/api/v1/customer/343894bb-2a27-42cf-95b6-1e1e70b2608a I have to add specific id for put request
     @PutMapping(BEER_PATH_ID)
     public ResponseEntity updateById(@PathVariable("beerId") UUID beerId, @Validated @RequestBody BeerDTO beer) {
@@ -52,11 +51,10 @@ public class BeerController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    //adding POST operation to accept a new beer into my repository
     @PostMapping(BEER_PATH)//this is cleaner mapping
-    //@RequestMapping(method = RequestMethod.POST)//this is second option
-    public ResponseEntity handlePost(@Validated @RequestBody BeerDTO beer) {//@RB annotation tells Spring to bind the JSON body to a Beer object
-//@Validated tells SpringMVC to go in DTO object must be valid according to validation constraints
+    //@RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity handlePost(@Validated @RequestBody BeerDTO beer) {
+//@Validated tells SpringMVC to go in DTO object, it must be valid according to validation constraints
         BeerDTO savedBeer = beerService.saveNewBeer(beer);//mimicking what persistence app would do but this example is without DB so...
 
         HttpHeaders headers = new HttpHeaders();
@@ -65,7 +63,7 @@ public class BeerController {
 
         return new ResponseEntity(headers, HttpStatus.CREATED);//RE basically gives me the memory to one created for the status
         //coming back, so I am saying that I want this to accept it
-        //this is when we get 201 status about successfully save to my "DB"
+        //this is when I get 201 status about successfully save to my "DB"
     }
 
     @GetMapping(BEER_PATH)//maps the path API of one beer to the list of beers
@@ -76,12 +74,12 @@ public class BeerController {
                                   @RequestParam(required = false) Boolean showInventory,
                                   @RequestParam(required = false) Integer pageNumber,
                                   @RequestParam(required = false) Integer pageSize) {
-        //Request and required is do to compatibility with BeerIT
+        //Request and required is due to compatibility with BeerIT
         return beerService.beerPage(beerName, beerStyle, showInventory, pageNumber, pageSize);
     }
 
     @GetMapping(BEER_PATH_ID)
-    //plus both method are limited to only GET methods so controller will not act on any other request
+    //plus both methods are limited to only GET methods so controller will not act on any other request
     public BeerDTO getBearById(@PathVariable("beerId") UUID beerId) {//Spring should match these 2 values "beerId"
         //but don't rely on that so that's why "@PathVariable("beerId")" is added, its mandatory especially if
         //variable names differ

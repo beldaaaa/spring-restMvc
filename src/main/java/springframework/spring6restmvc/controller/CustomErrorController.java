@@ -18,11 +18,9 @@ public class CustomErrorController {
 
         ResponseEntity.BodyBuilder responseEntity = ResponseEntity.badRequest();
 //if rollback exception is instanceof ...
-        if (exception.getCause().getCause() instanceof ConstraintViolationException) {
-            //casting to CVE
-            ConstraintViolationException violationException = (ConstraintViolationException) exception.getCause().getCause();
+        if (exception.getCause().getCause() instanceof ConstraintViolationException violationException) {
 
-            List errors = violationException.getConstraintViolations().stream()
+            List<Map<String, String>> errors = violationException.getConstraintViolations().stream()
                     .map(constraintViolation -> {
                         Map<String, String> errMap = new HashMap<>();
                         errMap.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
@@ -38,7 +36,7 @@ public class CustomErrorController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity handleBindErrors(MethodArgumentNotValidException ex) {
 
-        List errorList = ex.getFieldErrors().stream()
+        List<Map<String, String>> errorList = ex.getFieldErrors().stream()
                 .map(fieldError -> {
                     Map<String, String> errorMap = new HashMap<>();
                     errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());

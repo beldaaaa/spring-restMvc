@@ -15,7 +15,7 @@ import java.util.*;
 @Slf4j
 @Service
 public class BeerServiceImpl implements BeerService {
-    private Map<UUID, BeerDTO> beerMap;// just for example as substitute for DB
+    private final Map<UUID, BeerDTO> beerMap;// just for example as substitution for DB
     //so its initialized in ctor and generates data
 
     public BeerServiceImpl() {

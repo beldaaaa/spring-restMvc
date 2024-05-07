@@ -15,8 +15,9 @@ import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@DataJpaTest//SB Test splice again(it brings up a minimal config for testing the SDJPA components)
-@Import({BootStrapData.class, BeerCsvServiceImpl.class})//again because of test splice characteristic, I have to import this to not have a zero result in test because of not loaded components
+@DataJpaTest
+@Import({BootStrapData.class, BeerCsvServiceImpl.class})//again because of test splice characteristic,
+// I have to import this to not have a zero result in test because of not loaded components
 class BeerRepositoryTest {
 
     @Autowired

@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest//this is complete test with full context
-class BeerControllerIT {//IT = integration test
+class BeerControllerIT {
 
     @Autowired
     BeerController beerController;
@@ -229,12 +229,10 @@ class BeerControllerIT {//IT = integration test
     }
 
     //now I want to test the controller and its interaction with JPA data layer
-
     // I am not looking for web context. I am looking at testing the interaction of the controller with underlying service
     @Test
     void listBeers() {
         Page<BeerDTO> beerDTOList = beerController.beerPage(null, null, false, 1, 2413);
-
 
         assertThat(beerDTOList.getContent().size()).isEqualTo(1000);
     }

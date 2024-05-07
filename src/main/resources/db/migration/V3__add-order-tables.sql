@@ -1,7 +1,7 @@
 drop table if exists beer_order_line;
 drop table if exists beer_order;
 
-CREATE TABLE 'beer_order'
+CREATE TABLE beer_order
 (
     id                 varchar(36) NOT NULL,
     created_date       datetime(6)  DEFAULT NULL,
@@ -30,8 +30,7 @@ CREATE TABLE beer_order_line
 drop table if exists beer_order_shipment;
 
 
-#this is only for demonstration purpose, lets say I cant modify already existing beer order table
-#to demonstrate a OneToOne relationship
+#this is only for demonstration purpose, lets say I cant modify already existing beer order table(OneToOne relationship)
 CREATE TABLE beer_order_shipment
 (
     id                 VARCHAR(36) NOT NULL PRIMARY KEY,

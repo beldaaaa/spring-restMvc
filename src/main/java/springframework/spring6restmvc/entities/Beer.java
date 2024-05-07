@@ -39,12 +39,9 @@ public class Beer {
     private Integer version;
     @NotNull
     @NotBlank
-    //default Hibernate String VARCHAR length is 255, if I want to restrict max length, I will use JPA annotation
-    @Size(max = 50)//it is good practice to validate it here before it hits the DB (it would catch this violation too,
-    //but it is better to validate before I even try to persist to the DB, because this DB exception would bubble up
-    // to my service layer and ultimately to the web layer, so it is much more preferable to handle it through a
-    // bean validation constraint)
-    //generally it is good to have here validation constraints matching DB validation constraints
+    @Size(max = 50)//validating here before it hits the DB (it would catch this violation too, but it is better to
+    // validate before I even try to persist to the DB, because this DB exception would bubble up to my service layer
+    // and ultimately to the web layer, so it is much more preferable to handle it through a bean validation constraint)
     @Column(length = 50)
     private String beerName;
     @NotNull

@@ -39,5 +39,4 @@ public class BeerCSVRecord {
     @CsvBindByName
     private String label;
 
-    //https://opencsv.sourceforge.net/#quick_start guide
 }
