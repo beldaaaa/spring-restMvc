@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.springdoc.core.configuration.SpringDocSecurityConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import springframework.spring6restmvc.model.CustomerDTO;
@@ -25,8 +27,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static springframework.spring6restmvc.controller.BeerControllerTest.jwtRequestPostProcessor;
 
 @WebMvcTest(CustomerController.class)
+@Import(SpringDocSecurityConfiguration.class)
 public class CustomerControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -43,6 +47,7 @@ public class CustomerControllerTest {
     @Captor
     ArgumentCaptor<CustomerDTO> customerArgumentCaptor;
 
+
     @Test
     void patchCustomer() throws Exception {
         CustomerDTO customer = customerServiceImpl.customerList().getFirst();
@@ -50,6 +55,7 @@ public class CustomerControllerTest {
         customerMap.put("customerName", "Fakt se tak jmenuje");
 
         mockMvc.perform(patch(CustomerController.CUSTOMER_PATH_ID, customer.getId())
+                        .with(jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customerMap)))
@@ -68,6 +74,7 @@ public class CustomerControllerTest {
         given(customerService.deleteById(any())).willReturn(true);//fix
 
         mockMvc.perform(delete(CustomerController.CUSTOMER_PATH_ID, customer.getId())
+                        .with(jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer)))
@@ -85,6 +92,7 @@ public class CustomerControllerTest {
                 .build()));
 
         mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customer.getId())
+                        .with(jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer)))
@@ -103,6 +111,7 @@ public class CustomerControllerTest {
         given(customerService.saveNewCustomer(any(CustomerDTO.class))).willReturn(customerServiceImpl.customerList().get(1));
 
         mockMvc.perform(post(CustomerController.CUSTOMER_PATH)
+                        .with(jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer)))
@@ -114,6 +123,7 @@ public class CustomerControllerTest {
         given(customerService.customerList()).willReturn(customerServiceImpl.customerList());
 
         mockMvc.perform(get(CustomerController.CUSTOMER_PATH)
+                        .with(jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -125,7 +135,8 @@ public class CustomerControllerTest {
 
         given((customerService.getCustomerById(any(UUID.class)))).willReturn(Optional.empty());
 
-        mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, UUID.randomUUID()))
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, UUID.randomUUID())
+                        .with(jwtRequestPostProcessor))
                 .andExpect(status().isNotFound());
     }
 
@@ -136,6 +147,7 @@ public class CustomerControllerTest {
         given(customerService.getCustomerById(testCustomer.getId())).willReturn(Optional.of(testCustomer));
 
         mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, testCustomer.getId())
+                        .with(jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

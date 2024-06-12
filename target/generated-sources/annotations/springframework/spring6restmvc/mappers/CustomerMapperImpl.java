@@ -7,8 +7,8 @@ import springframework.spring6restmvc.model.CustomerDTO;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-04-08T17:23:43+0200",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Azul Systems, Inc.)"
+    date = "2024-06-12T20:10:14+0200",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.3 (Azul Systems, Inc.)"
 )
 @Component
 public class CustomerMapperImpl implements CustomerMapper {
@@ -22,8 +22,8 @@ public class CustomerMapperImpl implements CustomerMapper {
         Customer.CustomerBuilder customer = Customer.builder();
 
         customer.id( dto.getId() );
-        customer.version( dto.getVersion() );
         customer.customerName( dto.getCustomerName() );
+        customer.version( dto.getVersion() );
         customer.createdDate( dto.getCreatedDate() );
         customer.lastModifiedDate( dto.getLastModifiedDate() );
 

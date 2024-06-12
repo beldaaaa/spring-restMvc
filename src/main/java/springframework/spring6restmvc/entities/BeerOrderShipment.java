@@ -33,7 +33,7 @@ public class BeerOrderShipment {
     private String trackingNumber;
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return super.hashCode();
     }
 

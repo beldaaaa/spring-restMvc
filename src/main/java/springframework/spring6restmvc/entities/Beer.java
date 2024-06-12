@@ -64,6 +64,7 @@ public class Beer {
         this.categories.add(category);
         category.getBeers().add(this);//to keep bidirectional relationship
     }
+
     public void removeCategory(Category category) {
         this.categories.remove(category);
         category.getBeers().remove(category);
