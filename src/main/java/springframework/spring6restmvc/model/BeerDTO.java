@@ -26,7 +26,7 @@ public class BeerDTO {
     private Integer quantityOnHand;//so it doesn't affect this one
     @NotNull
     private BigDecimal price;
-    private LocalDateTime createdData;
-    private LocalDateTime updateData;
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
 
 }
