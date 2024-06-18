@@ -28,8 +28,8 @@ public class BeerServiceImpl implements BeerService {
                 .upc("456")
                 .price(new BigDecimal("25.90"))
                 .quantityOnHand(40)
-                .createdData(LocalDateTime.now())
-                .updateData(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
         BeerDTO beer2 = BeerDTO.builder()
                 .id(UUID.randomUUID())
@@ -39,8 +39,8 @@ public class BeerServiceImpl implements BeerService {
                 .upc("444")
                 .price(new BigDecimal("12.90"))
                 .quantityOnHand(120)
-                .createdData(LocalDateTime.now())
-                .updateData(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
         BeerDTO beer3 = BeerDTO.builder()
                 .id(UUID.randomUUID())
@@ -50,8 +50,8 @@ public class BeerServiceImpl implements BeerService {
                 .upc("99")
                 .price(new BigDecimal("50.90"))
                 .quantityOnHand(12)
-                .createdData(LocalDateTime.now())
-                .updateData(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
         beerMap.put(beer1.getId(), beer1);
         beerMap.put(beer2.getId(), beer2);
@@ -75,8 +75,8 @@ public class BeerServiceImpl implements BeerService {
     public BeerDTO saveNewBeer(BeerDTO beer) {
         BeerDTO savedBeer = BeerDTO.builder()//here we are again mimicking what the persistent store is going to do here
                 .id(UUID.randomUUID())
-                .createdData(LocalDateTime.now())
-                .updateData(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .beerName(beer.getBeerName())
                 .beerStyle(beer.getBeerStyle())
                 .quantityOnHand(beer.getQuantityOnHand())
