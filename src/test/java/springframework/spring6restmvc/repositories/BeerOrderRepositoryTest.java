@@ -45,7 +45,7 @@ class BeerOrderRepositoryTest {
                         .trackingNumber("661")
                         .build())
                 .build();
-//after persistence operations I want to get the object being returned from the repository
+        //after persistence operations I want to get the object being returned from the repository
         BeerOrder savedOrder = orderRepository.save(beerOrder);
         //with "...AndFlush" that tells Hibernate to persist this to the DB immediately and Hibernate will look int the DB
         //for the relationship of customer and beerOrders

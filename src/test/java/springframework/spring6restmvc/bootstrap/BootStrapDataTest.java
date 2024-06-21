@@ -13,7 +13,7 @@ import springframework.spring6restmvc.services.BeerCsvServiceImpl;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import(BeerCsvServiceImpl.class)//its test splice test so Spring context does not do a full component scan
+@Import(BeerCsvServiceImpl.class)//its test splice so Spring context does not do a full component scan
         //and limits it only to the data components in the repositories ->import it explicitly
 class BootStrapDataTest {
 

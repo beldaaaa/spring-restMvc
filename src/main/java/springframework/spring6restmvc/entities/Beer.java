@@ -27,7 +27,6 @@ public class Beer {
     @Id//mandatory
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-//this is out of JPA, it's done by Hibernate
     @Column(length = 99, columnDefinition = "varchar(36)", updatable = false, nullable = false)
 //some hints for Hibernate
     // to know how to create the DB table when generating the SQL inside H2 in-memory DB

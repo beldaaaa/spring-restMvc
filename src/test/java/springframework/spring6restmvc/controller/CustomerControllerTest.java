@@ -88,8 +88,9 @@ public class CustomerControllerTest {
     void updateCustomer() throws Exception {
         CustomerDTO customer = customerServiceImpl.customerList().getFirst();
 
-        given(customerService.updateCustomerById(any(), any())).willReturn(Optional.of(CustomerDTO.builder()
-                .build()));
+        given(customerService.updateCustomerById(any(), any()))
+                .willReturn(Optional.of(CustomerDTO.builder()
+                        .build()));
 
         mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                         .with(jwtRequestPostProcessor)
@@ -108,7 +109,8 @@ public class CustomerControllerTest {
         customer.setVersion(null);
         customer.setId(null);
 
-        given(customerService.saveNewCustomer(any(CustomerDTO.class))).willReturn(customerServiceImpl.customerList().get(1));
+        given(customerService.saveNewCustomer(any(CustomerDTO.class)))
+                .willReturn(customerServiceImpl.customerList().get(1));
 
         mockMvc.perform(post(CustomerController.CUSTOMER_PATH)
                         .with(jwtRequestPostProcessor)
@@ -133,7 +135,8 @@ public class CustomerControllerTest {
     @Test
     void getCustomerByIdNotFound() throws Exception {
 
-        given((customerService.getCustomerById(any(UUID.class)))).willReturn(Optional.empty());
+        given((customerService.getCustomerById(any(UUID.class))))
+                .willReturn(Optional.empty());
 
         mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, UUID.randomUUID())
                         .with(jwtRequestPostProcessor))
@@ -144,7 +147,8 @@ public class CustomerControllerTest {
     void getCustomerById() throws Exception {
         CustomerDTO testCustomer = customerServiceImpl.customerList().getFirst();
 
-        given(customerService.getCustomerById(testCustomer.getId())).willReturn(Optional.of(testCustomer));
+        given(customerService.getCustomerById(testCustomer.getId()))
+                .willReturn(Optional.of(testCustomer));
 
         mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, testCustomer.getId())
                         .with(jwtRequestPostProcessor)

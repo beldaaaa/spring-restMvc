@@ -83,7 +83,6 @@ public class BeerServiceJPA implements BeerService {
     }
 
     Page<Beer> pageBeerByName(String beerName, Pageable pageable) {
-        //returns a list of the beer entity objects (and that will get assigned the beerList)
         // + wildcard search characters for SQL again
         return beerRepository.findAllByBeerNameIsLikeIgnoreCase("%" + beerName + "%", pageable);
     }
@@ -92,7 +91,6 @@ public class BeerServiceJPA implements BeerService {
         return beerRepository.findAllByBeerStyle(beerStyle, pageable);
     }
 
-    //but for getBeerById I need to return error if it's not found
     @Override
     public Optional<BeerDTO> getBeerById(UUID id) {
         return Optional.ofNullable(beerMapper.beerToBeerDto(beerRepository.findById(id)

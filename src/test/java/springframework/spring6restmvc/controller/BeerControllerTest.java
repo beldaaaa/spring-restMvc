@@ -70,10 +70,12 @@ class BeerControllerTest {
     @Test
     void updateBlankBeerName() throws Exception {
 
-        BeerDTO beerDTO = beerServiceImpl.beerPage(null, null, null, null, null).getContent().getFirst();
+        BeerDTO beerDTO = beerServiceImpl.beerPage(null, null, null, null, null)
+                .getContent().getFirst();
         beerDTO.setBeerName("");
 
-        given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beerDTO));
+        given(beerService.updateBeerById(any(), any()))
+                .willReturn(Optional.of(beerDTO));
 
         mockMvc.perform(put(BeerController.BEER_PATH_ID, beerDTO.getId())
                         .with(jwtRequestPostProcessor)
@@ -89,7 +91,9 @@ class BeerControllerTest {
 
         BeerDTO beerDTO = BeerDTO.builder().build();
 
-        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.beerPage(null, null, null, null, null).getContent().getFirst());
+        given(beerService.saveNewBeer(any(BeerDTO.class)))
+                .willReturn(beerServiceImpl.beerPage(null, null, null, null, null)
+                        .getContent().getFirst());
 
         MvcResult mvcResult = mockMvc.perform(post(BeerController.BEER_PATH)
                         .with(jwtRequestPostProcessor)
@@ -106,7 +110,8 @@ class BeerControllerTest {
     @Test
     void patchBeer() throws Exception {
         //to give my request a body (JSON of the beer map object)
-        BeerDTO beer = beerServiceImpl.beerPage(null, null, null, null, null).getContent().getFirst();
+        BeerDTO beer = beerServiceImpl.beerPage(null, null, null, null, null)
+                .getContent().getFirst();
         //a little change: I don't need to give it a fully qualified object,
         //so I can just create a map for Jackson (put key becomes the JSON property)
         Map<String, Object> beerMap = new HashMap<>();
@@ -129,9 +134,10 @@ class BeerControllerTest {
 
     @Test
     void deleteBeer() throws Exception {
-        BeerDTO beer = beerServiceImpl.beerPage(null, null, null, null, null).getContent().getFirst();
+        BeerDTO beer = beerServiceImpl.beerPage(null, null, null, null, null)
+                .getContent().getFirst();
 
-        given(beerService.deleteById(any())).willReturn(true);//fix
+        given(beerService.deleteById(any())).willReturn(true);
 
         mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
                         .with(jwtRequestPostProcessor)
@@ -149,9 +155,11 @@ class BeerControllerTest {
 
     @Test
     void updateBeer() throws Exception {
-        BeerDTO beer = beerServiceImpl.beerPage(null, null, null, null, null).getContent().getFirst();
+        BeerDTO beer = beerServiceImpl.beerPage(null, null, null, null, null)
+                .getContent().getFirst();
 
-        given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beer));
+        given(beerService.updateBeerById(any(), any()))
+                .willReturn(Optional.of(beer));
 
         mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
                         .with(jwtRequestPostProcessor)
@@ -167,7 +175,8 @@ class BeerControllerTest {
 
     @Test
     void getBeerList() throws Exception {
-        given(beerService.beerPage(null, null, null, null, null)).willReturn(beerServiceImpl.beerPage(null, null, null, null, null));
+        given(beerService.beerPage(null, null, null, null, null))
+                .willReturn(beerServiceImpl.beerPage(null, null, null, null, null));
 
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .with(jwtRequestPostProcessor)
@@ -181,7 +190,8 @@ class BeerControllerTest {
     @Test
     void getBeerByIdNotFound() throws Exception {
 
-        given((beerService.getBeerById(any(UUID.class)))).willReturn(Optional.empty());
+        given((beerService.getBeerById(any(UUID.class))))
+                .willReturn(Optional.empty());
 
         mockMvc.perform(get(BeerController.BEER_PATH_ID, UUID.randomUUID())
                         .with(jwtRequestPostProcessor))
@@ -190,9 +200,11 @@ class BeerControllerTest {
 
     @Test
     void getBearById() throws Exception {
-        BeerDTO testBeer = beerServiceImpl.beerPage(null, null, null, null, null).getContent().getFirst();
+        BeerDTO testBeer = beerServiceImpl.beerPage(null, null, null, null, null)
+                .getContent().getFirst();
 
-        given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of(testBeer));//configuring Mockito to go ahead
+        given(beerService.getBeerById(testBeer.getId()))
+                .willReturn(Optional.of(testBeer));//configuring Mockito to go ahead
         // and return that testBeer object.
         // So I get the testBeer object from the service implementation and then tell Mockito to return it
         mockMvc.perform(get(BeerController.BEER_PATH_ID, testBeer.getId())//I want ot perform get against URL
@@ -206,11 +218,14 @@ class BeerControllerTest {
 
     @Test
     void createNewBeer() throws Exception {
-        BeerDTO beer = beerServiceImpl.beerPage(null, null, false, 1, 25).getContent().getFirst();
+        BeerDTO beer = beerServiceImpl.beerPage(null, null, false, 1, 25)
+                .getContent().getFirst();
         beer.setVersion(null);
         beer.setId(null);
 
-        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.beerPage(null, null, false, 1, 25).getContent().get(1));
+        given(beerService.saveNewBeer(any(BeerDTO.class)))
+                .willReturn(beerServiceImpl.beerPage(null, null, false, 1, 25)
+                        .getContent().get(1));
 
         mockMvc.perform(post(BeerController.BEER_PATH)
                         .with(jwtRequestPostProcessor)

@@ -40,7 +40,6 @@ public class BeerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //http://localhost:8080/api/v1/customer/343894bb-2a27-42cf-95b6-1e1e70b2608a I have to add specific id for put request
     @PutMapping(BEER_PATH_ID)
     public ResponseEntity updateById(@PathVariable("beerId") UUID beerId, @Validated @RequestBody BeerDTO beer) {
 
@@ -51,8 +50,7 @@ public class BeerController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping(BEER_PATH)//this is cleaner mapping
-    //@RequestMapping(method = RequestMethod.POST)
+    @PostMapping(BEER_PATH)
     public ResponseEntity handlePost(@Validated @RequestBody BeerDTO beer) {
 //@Validated tells SpringMVC to go in DTO object, it must be valid according to validation constraints
         BeerDTO savedBeer = beerService.saveNewBeer(beer);//mimicking what persistence app would do but this example is without DB so...
@@ -79,7 +77,6 @@ public class BeerController {
     }
 
     @GetMapping(BEER_PATH_ID)
-    //plus both methods are limited to only GET methods so controller will not act on any other request
     public BeerDTO getBearById(@PathVariable("beerId") UUID beerId) {//Spring should match these 2 values "beerId"
         //but don't rely on that so that's why "@PathVariable("beerId")" is added, its mandatory especially if
         //variable names differ

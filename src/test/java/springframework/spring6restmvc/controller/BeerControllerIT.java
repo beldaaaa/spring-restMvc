@@ -221,7 +221,7 @@ class BeerControllerIT {
     @Test
     void getById() {
         Beer beer = beerRepository.findAll().getFirst();//every time this test runs, it creates a new object and UUID changes
-        //so that's not persistent, ts its in-memory DB
+        //so that's not persistent, its in-memory DB
 
         BeerDTO dto = beerController.getBearById(beer.getId());//this is normal operation
 
