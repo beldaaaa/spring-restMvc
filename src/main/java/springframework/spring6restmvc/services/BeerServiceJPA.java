@@ -1,6 +1,7 @@
 package springframework.spring6restmvc.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,7 @@ public class BeerServiceJPA implements BeerService {
     private static final int DEFAULT_PAGE = 0;
     private static final int DEFAULT_PAGE_SIZE = 25;
 
+    @Cacheable(cacheNames = "beerListCache")
     @Override
     public Page<BeerDTO> beerPage(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize) {
 
@@ -90,7 +92,7 @@ public class BeerServiceJPA implements BeerService {
     Page<Beer> pageBeerByStyle(BeerStyle beerStyle, Pageable pageable) {
         return beerRepository.findAllByBeerStyle(beerStyle, pageable);
     }
-
+@Cacheable(cacheNames = "beerCache",key = "#id")//key is not mandatory here
     @Override
     public Optional<BeerDTO> getBeerById(UUID id) {
         return Optional.ofNullable(beerMapper.beerToBeerDto(beerRepository.findById(id)
