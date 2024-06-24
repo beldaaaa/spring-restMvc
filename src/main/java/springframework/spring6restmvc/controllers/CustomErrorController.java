@@ -1,4 +1,4 @@
-package springframework.spring6restmvc.controller;
+package springframework.spring6restmvc.controllers;
 
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;

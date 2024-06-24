@@ -3,7 +3,7 @@ package springframework.spring6restmvc.services;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import springframework.spring6restmvc.model.CustomerDTO;
+import springframework.spring6restmvc.models.CustomerDTO;
 
 import java.time.LocalDateTime;
 import java.util.*;

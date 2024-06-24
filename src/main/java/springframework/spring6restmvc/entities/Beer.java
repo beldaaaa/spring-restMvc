@@ -10,7 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
-import springframework.spring6restmvc.model.BeerStyle;
+import springframework.spring6restmvc.models.BeerStyle;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

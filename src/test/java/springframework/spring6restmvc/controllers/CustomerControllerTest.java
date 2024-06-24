@@ -1,4 +1,4 @@
-package springframework.spring6restmvc.controller;
+package springframework.spring6restmvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import springframework.spring6restmvc.model.CustomerDTO;
+import springframework.spring6restmvc.models.CustomerDTO;
 import springframework.spring6restmvc.services.CustomerService;
 import springframework.spring6restmvc.services.CustomerServiceImpl;
 
@@ -27,7 +27,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static springframework.spring6restmvc.controller.BeerControllerTest.jwtRequestPostProcessor;
+import static springframework.spring6restmvc.controllers.BeerControllerTest.jwtRequestPostProcessor;
 
 @WebMvcTest(CustomerController.class)
 @Import(SpringDocSecurityConfiguration.class)

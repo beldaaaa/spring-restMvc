@@ -1,4 +1,4 @@
-package springframework.spring6restmvc.controller;
+package springframework.spring6restmvc.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import springframework.spring6restmvc.model.BeerDTO;
-import springframework.spring6restmvc.model.BeerStyle;
+import springframework.spring6restmvc.models.BeerDTO;
+import springframework.spring6restmvc.models.BeerStyle;
 import springframework.spring6restmvc.services.BeerService;
 
 import java.util.UUID;

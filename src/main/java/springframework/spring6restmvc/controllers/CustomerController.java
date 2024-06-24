@@ -1,4 +1,4 @@
-package springframework.spring6restmvc.controller;
+package springframework.spring6restmvc.controllers;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,7 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springframework.spring6restmvc.model.CustomerDTO;
+import springframework.spring6restmvc.models.CustomerDTO;
 import springframework.spring6restmvc.services.CustomerService;
 
 import java.util.List;

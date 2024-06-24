@@ -6,7 +6,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import springframework.spring6restmvc.mappers.CustomerMapper;
-import springframework.spring6restmvc.model.CustomerDTO;
+import springframework.spring6restmvc.models.CustomerDTO;
 import springframework.spring6restmvc.repositories.CustomerRepository;
 
 import java.util.List;

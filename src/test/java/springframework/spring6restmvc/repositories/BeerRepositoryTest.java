@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import springframework.spring6restmvc.bootstrap.BootStrapData;
 import springframework.spring6restmvc.entities.Beer;
-import springframework.spring6restmvc.model.BeerStyle;
+import springframework.spring6restmvc.models.BeerStyle;
 import springframework.spring6restmvc.services.BeerCsvServiceImpl;
 
 import java.math.BigDecimal;

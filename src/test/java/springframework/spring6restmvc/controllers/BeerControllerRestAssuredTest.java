@@ -1,4 +1,4 @@
-package springframework.spring6restmvc.controller;
+package springframework.spring6restmvc.controllers;
 
 import com.atlassian.oai.validator.OpenApiInteractionValidator;
 import com.atlassian.oai.validator.restassured.OpenApiValidationFilter;

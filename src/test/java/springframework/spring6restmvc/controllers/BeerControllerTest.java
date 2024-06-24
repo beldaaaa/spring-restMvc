@@ -1,4 +1,4 @@
-package springframework.spring6restmvc.controller;
+package springframework.spring6restmvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import springframework.spring6restmvc.config.SpringSecurityConfig;
-import springframework.spring6restmvc.model.BeerDTO;
+import springframework.spring6restmvc.configs.SpringSecurityConfig;
+import springframework.spring6restmvc.models.BeerDTO;
 import springframework.spring6restmvc.services.BeerService;
 import springframework.spring6restmvc.services.BeerServiceImpl;
 

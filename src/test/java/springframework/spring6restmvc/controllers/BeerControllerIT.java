@@ -1,4 +1,4 @@
-package springframework.spring6restmvc.controller;
+package springframework.spring6restmvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.core.IsNull;
@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import springframework.spring6restmvc.entities.Beer;
 import springframework.spring6restmvc.mappers.BeerMapper;
-import springframework.spring6restmvc.model.BeerDTO;
-import springframework.spring6restmvc.model.BeerStyle;
+import springframework.spring6restmvc.models.BeerDTO;
+import springframework.spring6restmvc.models.BeerStyle;
 import springframework.spring6restmvc.repositories.BeerRepository;
 
 import java.math.BigDecimal;
@@ -29,8 +29,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -183,6 +182,25 @@ class BeerControllerIT {
         Beer updatedBeer = beerRepository.findById(beer.getId()).get();
         assertThat(updatedBeer.getBeerName()).isEqualTo(beerName);
 
+    }
+
+    @Test
+    void saveNewBeerMVC() throws Exception {
+        BeerDTO beerDTO = BeerDTO.builder()
+                .beerName("Policka")
+                .beerStyle(BeerStyle.STOUT)
+                .price(new BigDecimal("11.90"))
+                .upc("45654")
+                .quantityOnHand(44)
+                .build();
+
+        mockMvc.perform(post(BeerController.BEER_PATH)
+                        .with(BeerControllerTest.jwtRequestPostProcessor)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerDTO)))
+                .andExpect(status().isCreated())
+                .andReturn();
     }
 
     @Rollback//to not interfere with any other test

@@ -1,19 +1,24 @@
 package springframework.spring6restmvc.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import springframework.spring6restmvc.entities.Beer;
+import springframework.spring6restmvc.events.BeerCreatedEvent;
 import springframework.spring6restmvc.mappers.BeerMapper;
-import springframework.spring6restmvc.model.BeerDTO;
-import springframework.spring6restmvc.model.BeerStyle;
+import springframework.spring6restmvc.models.BeerDTO;
+import springframework.spring6restmvc.models.BeerStyle;
 import springframework.spring6restmvc.repositories.BeerRepository;
 
 import java.util.Objects;
@@ -29,6 +34,7 @@ public class BeerServiceJPA implements BeerService {
     private final BeerRepository beerRepository;
     private final BeerMapper beerMapper;
     private final CacheManager cacheManager;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     private static final int DEFAULT_PAGE = 0;
     private static final int DEFAULT_PAGE_SIZE = 25;
@@ -106,7 +112,10 @@ public class BeerServiceJPA implements BeerService {
     @Override
     public BeerDTO saveNewBeer(BeerDTO beer) {
         Objects.requireNonNull(cacheManager.getCache("beerListCache")).clear();
-        return beerMapper.beerToBeerDto(beerRepository.save(beerMapper.beerDtoToBeer(beer)));//well this is a bit confusing
+        val saveBeer = beerRepository.save(beerMapper.beerDtoToBeer(beer));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        applicationEventPublisher.publishEvent(new BeerCreatedEvent(saveBeer, authentication));
+        return beerMapper.beerToBeerDto(saveBeer);
     }
 
     //due to stall cache, I need to do a different approach or refactor code and split operations into separate classes
