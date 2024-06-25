@@ -5,10 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 import springframework.spring6restmvc.models.BeerStyle;
 
@@ -26,7 +23,7 @@ import java.util.UUID;
 public class Beer {
     @Id//mandatory
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
     @Column(length = 99, columnDefinition = "varchar(36)", updatable = false, nullable = false)
 //some hints for Hibernate
     // to know how to create the DB table when generating the SQL inside H2 in-memory DB
