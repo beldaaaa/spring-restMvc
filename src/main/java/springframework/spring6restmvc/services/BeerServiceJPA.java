@@ -113,6 +113,9 @@ public class BeerServiceJPA implements BeerService {
     public BeerDTO saveNewBeer(BeerDTO beer) {
         Objects.requireNonNull(cacheManager.getCache("beerListCache")).clear();
         val saveBeer = beerRepository.save(beerMapper.beerDtoToBeer(beer));
+
+        System.out.println("Thread name: " + Thread.currentThread().getName() + " with ID: " + Thread.currentThread().getId());
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         applicationEventPublisher.publishEvent(new BeerCreatedEvent(saveBeer, authentication));
         return beerMapper.beerToBeerDto(saveBeer);
