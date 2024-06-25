@@ -1,9 +1,11 @@
 package springframework.spring6restmvc.entities;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
@@ -14,6 +16,12 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Builder
+@Getter
+@Setter
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class BeerAudit {
     @Id
     @GeneratedValue(generator = "UUID")

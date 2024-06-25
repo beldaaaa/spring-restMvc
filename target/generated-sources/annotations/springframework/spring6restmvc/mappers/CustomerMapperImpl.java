@@ -7,7 +7,7 @@ import springframework.spring6restmvc.models.CustomerDTO;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-24T16:15:25+0200",
+    date = "2024-06-25T14:29:41+0200",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.3 (Azul Systems, Inc.)"
 )
 @Component
