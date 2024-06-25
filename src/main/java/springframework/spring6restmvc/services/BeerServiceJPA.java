@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import springframework.spring6restmvc.entities.Beer;
 import springframework.spring6restmvc.events.BeerCreatedEvent;
+import springframework.spring6restmvc.events.BeerDeletedEvent;
+import springframework.spring6restmvc.events.BeerPatchedEvent;
+import springframework.spring6restmvc.events.BeerUpdatedEvent;
 import springframework.spring6restmvc.mappers.BeerMapper;
 import springframework.spring6restmvc.models.BeerDTO;
 import springframework.spring6restmvc.models.BeerStyle;
@@ -133,8 +136,14 @@ public class BeerServiceJPA implements BeerService {
             foundBeer.setPrice(beer.getPrice());
             foundBeer.setUpc(beer.getUpc());
             foundBeer.setVersion(beer.getVersion());
+
+            var savedBeer = beerRepository.save(foundBeer);
+            var auth = SecurityContextHolder.getContext().getAuthentication();
+
+            applicationEventPublisher.publishEvent(new BeerUpdatedEvent(savedBeer, auth));
+
             atomicReference.set(Optional.of(beerMapper
-                    .beerToBeerDto(beerRepository.save(foundBeer))));
+                    .beerToBeerDto(savedBeer)));
         }, () -> atomicReference.set(Optional.empty()));
         return atomicReference.get();
     }
@@ -143,6 +152,11 @@ public class BeerServiceJPA implements BeerService {
     public Boolean deleteById(UUID beerId) {
         clearCache(beerId);
         if (beerRepository.existsById(beerId)) {
+
+            var auth = SecurityContextHolder.getContext().getAuthentication();
+
+            applicationEventPublisher.publishEvent(new BeerDeletedEvent(Beer.builder().id(beerId).build(), auth));
+
             beerRepository.deleteById(beerId);
             return true;
         }
@@ -159,8 +173,14 @@ public class BeerServiceJPA implements BeerService {
             foundBeer.setPrice(beer.getPrice());
             foundBeer.setUpc(beer.getUpc());
             foundBeer.setQuantityOnHand(beer.getQuantityOnHand());
+
+            var savedBeer = beerRepository.save(foundBeer);
+            var auth = SecurityContextHolder.getContext().getAuthentication();
+
+            applicationEventPublisher.publishEvent(new BeerPatchedEvent(savedBeer, auth));
+
             atomicReference.set(Optional.of(beerMapper
-                    .beerToBeerDto(beerRepository.save(foundBeer))));
+                    .beerToBeerDto(savedBeer)));
         }, () -> atomicReference.set(Optional.empty()));
         return atomicReference.get();
     }

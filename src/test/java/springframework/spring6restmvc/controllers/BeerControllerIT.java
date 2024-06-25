@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import springframework.spring6restmvc.entities.Beer;
 import springframework.spring6restmvc.events.BeerCreatedEvent;
+import springframework.spring6restmvc.events.BeerUpdatedEvent;
 import springframework.spring6restmvc.mappers.BeerMapper;
 import springframework.spring6restmvc.models.BeerDTO;
 import springframework.spring6restmvc.models.BeerStyle;
@@ -175,7 +176,7 @@ class BeerControllerIT {
     @Rollback
     @Transactional
     @Test
-    void updateBeerFound() {
+    void updateBeerFoundMvc() throws Exception {
         Beer beer = beerRepository.findAll().getFirst();
         BeerDTO beerDTO = beerMapper.beerToBeerDto(beer);
         beerDTO.setId(null);
@@ -183,13 +184,17 @@ class BeerControllerIT {
         final String beerName = "updatovanePivo";
         beerDTO.setBeerName(beerName);
 
-        var responseEntity = beerController.updateById(beer.getId(), beerDTO);
+        mockMvc.perform(put(BeerController.BEER_PATH_ID,beer.getId())
+                        .with(BeerControllerTest.jwtRequestPostProcessor)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerDTO)))
+                .andExpect(status().isNoContent())
+                .andReturn();
 
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
-
-        Beer updatedBeer = beerRepository.findById(beer.getId()).get();
-        assertThat(updatedBeer.getBeerName()).isEqualTo(beerName);
-
+        Assertions.assertEquals(1, applicationEvents
+                .stream(BeerUpdatedEvent.class)
+                .count());
     }
 
     @Test
