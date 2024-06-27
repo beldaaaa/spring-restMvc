@@ -1,5 +1,7 @@
 package springframework.spring6restmvc.models;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import springframework.spring6restmvc.entities.Customer;
@@ -14,9 +16,11 @@ public class BeerOrderDTO {
 
     private UUID id;
     private Long version;
-    private Timestamp createdDate;
     private Timestamp lastModifiedDate;
     private String customerRef;
+    private Timestamp createdDate;
+    @NotNull
+    @NotBlank
     private Customer customer;
 
     private Set<BeerOrderLineDTO> beerOrderLinesDto;
