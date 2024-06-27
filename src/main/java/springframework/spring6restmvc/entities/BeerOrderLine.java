@@ -2,7 +2,6 @@ package springframework.spring6restmvc.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
@@ -48,7 +47,6 @@ public class BeerOrderLine {
 
     @Min(value = 1,message = "Minimum quantity must be at least 1")
     private Integer orderQuantity = 1;
-    @NotBlank
     private Integer quantityAllocated = 0;
 
 }

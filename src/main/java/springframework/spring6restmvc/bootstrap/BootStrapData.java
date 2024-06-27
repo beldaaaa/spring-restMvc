@@ -7,9 +7,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 import springframework.spring6restmvc.entities.Beer;
+import springframework.spring6restmvc.entities.BeerOrder;
+import springframework.spring6restmvc.entities.BeerOrderLine;
 import springframework.spring6restmvc.entities.Customer;
 import springframework.spring6restmvc.models.BeerCSVRecord;
 import springframework.spring6restmvc.models.BeerStyle;
+import springframework.spring6restmvc.repositories.BeerOrderRepository;
 import springframework.spring6restmvc.repositories.BeerRepository;
 import springframework.spring6restmvc.repositories.CustomerRepository;
 import springframework.spring6restmvc.services.BeerCsvService;
@@ -19,15 +22,18 @@ import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
 public class BootStrapData implements CommandLineRunner {
 
+    private final BeerCsvService beerCsvService;
     private final BeerRepository beerRepository;
     private final CustomerRepository customerRepository;
-    private final BeerCsvService beerCsvService;
+    private final BeerOrderRepository beerOrderRepository;
 
     @Transactional
     @Override
@@ -35,6 +41,7 @@ public class BootStrapData implements CommandLineRunner {
         loadBeerData();
         loadCsvData();
         loadCustomerData();
+        loadBeerOrderData();
     }
 
     private void loadCsvData() throws FileNotFoundException {
@@ -124,5 +131,41 @@ public class BootStrapData implements CommandLineRunner {
 
             customerRepository.saveAll(Arrays.asList(customer1, customer2, customer3));
         }
+    }
+
+    private void loadBeerOrderData() {
+        List<Beer> beers = beerRepository.findAll();
+        List<Customer> customers = customerRepository.findAll();
+        Iterator<Beer> beerIterator = beers.iterator();
+
+        customers.forEach(customer -> {
+            beerOrderRepository.save(BeerOrder.builder()
+                    .customer(customer)
+                    .beerOrderLines(Set.of(
+                            BeerOrderLine.builder()
+                                    .beer(beerIterator.next())
+                                    .orderQuantity(44)
+                                    .build(),
+                            BeerOrderLine.builder()
+                                    .beer(beerIterator.next())
+                                    .orderQuantity(17)
+                                    .build()
+                    ))
+                    .build());
+
+            beerOrderRepository.save(BeerOrder.builder()
+                    .customer(customer)
+                    .beerOrderLines(Set.of(
+                            BeerOrderLine.builder()
+                                    .beer(beerIterator.next())
+                                    .orderQuantity(44)
+                                    .build(),
+                            BeerOrderLine.builder()
+                                    .beer(beerIterator.next())
+                                    .orderQuantity(17)
+                                    .build()
+                    ))
+                    .build());
+        });
     }
 }

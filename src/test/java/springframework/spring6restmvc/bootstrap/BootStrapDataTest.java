@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import springframework.spring6restmvc.repositories.BeerOrderRepository;
 import springframework.spring6restmvc.repositories.BeerRepository;
 import springframework.spring6restmvc.repositories.CustomerRepository;
 import springframework.spring6restmvc.services.BeerCsvService;
@@ -23,12 +24,14 @@ class BootStrapDataTest {
     CustomerRepository customerRepository;
     @Autowired
     BeerCsvService beerCsvService;
+    @Autowired
+    BeerOrderRepository beerOrderRepository;
 
     BootStrapData bootStrapData;
 
     @BeforeEach
     void setUp() {
-        bootStrapData = new BootStrapData(beerRepository, customerRepository, beerCsvService);
+        bootStrapData = new BootStrapData(beerCsvService, beerRepository, customerRepository, beerOrderRepository);
     }
 
     @Test

@@ -2,7 +2,6 @@ package springframework.spring6restmvc.models;
 
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,7 +20,6 @@ public class BeerOrderLineDTO {
 
     @Min(value = 1,message = "Minimum quantity must be at least 1")
     private Integer orderQuantity;
-    @NotBlank
     private Integer quantityAllocated;
 
 }
