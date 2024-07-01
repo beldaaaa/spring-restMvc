@@ -1,9 +1,10 @@
 package springframework.spring6restmvc.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ import java.util.UUID;
 public class Customer {
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
@@ -36,6 +37,7 @@ public class Customer {
 
     @Builder.Default //builds an empty HashSet if it's not set already
     @OneToMany(mappedBy = "customer")
+    @JsonBackReference(value = "beer-order")
     private Set<BeerOrder> beerOrders = new HashSet<>(); //to make sure its initialized
 
 }

@@ -1,5 +1,6 @@
 package springframework.spring6restmvc.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -57,6 +58,7 @@ public class BeerOrder {
     private String customerRef;
 
     @ManyToOne
+    @JsonManagedReference(value = "beer-order")
     private Customer customer;
 
     //to override what was Lombok providing (helper method)
