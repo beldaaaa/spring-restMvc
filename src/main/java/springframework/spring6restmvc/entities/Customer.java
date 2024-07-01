@@ -1,6 +1,5 @@
 package springframework.spring6restmvc.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -15,9 +14,9 @@ import java.util.UUID;
 @Builder
 @Getter
 @Setter
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Customer {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -37,7 +36,6 @@ public class Customer {
 
     @Builder.Default //builds an empty HashSet if it's not set already
     @OneToMany(mappedBy = "customer")
-    @JsonBackReference(value = "beer-order")
     private Set<BeerOrder> beerOrders = new HashSet<>(); //to make sure its initialized
 
 }

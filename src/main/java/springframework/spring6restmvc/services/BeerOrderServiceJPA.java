@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class BeerOrderServiceImpl implements BeerOrderService {
+public class BeerOrderServiceJPA implements BeerOrderService {
 
     private final BeerOrderRepository beerOrderRepository;
     private final BeerOrderMapper beerOrderMapper;

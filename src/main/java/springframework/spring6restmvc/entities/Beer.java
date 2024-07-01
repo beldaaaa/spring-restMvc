@@ -20,9 +20,9 @@ import java.util.UUID;
 @Builder
 @Getter
 @Setter
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Beer {
     @Id//mandatory
     @GeneratedValue(generator = "UUID")
