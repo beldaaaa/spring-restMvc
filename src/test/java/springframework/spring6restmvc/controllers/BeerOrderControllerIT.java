@@ -8,23 +8,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import springframework.spring6restmvc.entities.Beer;
 import springframework.spring6restmvc.entities.BeerOrder;
 import springframework.spring6restmvc.entities.Customer;
-import springframework.spring6restmvc.models.BeerOrderCreateDTO;
-import springframework.spring6restmvc.models.BeerOrderLineCreateDTO;
+import springframework.spring6restmvc.mappers.BeerOrderMapper;
+import springframework.spring6restmvc.models.*;
 import springframework.spring6restmvc.repositories.BeerOrderRepository;
 import springframework.spring6restmvc.repositories.BeerRepository;
 import springframework.spring6restmvc.repositories.CustomerRepository;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static springframework.spring6restmvc.controllers.BeerControllerTest.jwtRequestPostProcessor;
 
@@ -45,6 +46,9 @@ class BeerOrderControllerIT {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    BeerOrderMapper beerOrderMapper;
 
     MockMvc mockMvc;
 
@@ -91,6 +95,34 @@ class BeerOrderControllerIT {
                         .with(jwtRequestPostProcessor))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
+    }
+@Transactional
+    @Test
+    void updateBeerOrder() throws Exception {
+        BeerOrder beerOrder = beerOrderRepository.findAll().getFirst();
+        Set<BeerOrderLineUpdateDTO> beerOrderLines = new HashSet<>();
+        beerOrder.getBeerOrderLines().forEach(beerOrderLine ->
+                beerOrderLines.add(BeerOrderLineUpdateDTO.builder()
+                        .lineId(beerOrderLine.getId())
+                        .beerId(beerOrderLine.getBeer().getId())
+                        .orderQuantity(beerOrderLine.getOrderQuantity())
+                        .quantityAllocated(beerOrderLine.getQuantityAllocated())
+                        .build()));
+        BeerOrderUpdateDTO beerOrderUpdateDTO = BeerOrderUpdateDTO.builder()
+                .customerId(beerOrder.getCustomer().getId())
+                .customerRef("randomReferenceToSomethingReallyImportant")
+                .shipmentUpdateDTO(BeerOrderShipmentUpdateDTO.builder()
+                        .trackingNumber("661")
+                        .build())
+                .beerOrderLinesUpdateDTO(beerOrderLines)
+                .build();
+
+        mockMvc.perform(put(BeerOrderController.BEER_ORDER_PATH_ID, beerOrder.getId())
+                        .with(jwtRequestPostProcessor)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerOrderUpdateDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customerRef", is("randomReferenceToSomethingReallyImportant")));
 
     }
 

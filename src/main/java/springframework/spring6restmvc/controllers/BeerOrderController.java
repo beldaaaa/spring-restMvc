@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import springframework.spring6restmvc.entities.BeerOrder;
 import springframework.spring6restmvc.models.BeerOrderCreateDTO;
 import springframework.spring6restmvc.models.BeerOrderDTO;
+import springframework.spring6restmvc.models.BeerOrderUpdateDTO;
 import springframework.spring6restmvc.services.BeerOrderService;
 
 import java.net.URI;
@@ -36,5 +37,10 @@ public class BeerOrderController {
         BeerOrder savedBeerOrder = beerOrderService.createBeerOrder(beerOrderCreateDTO);
 
         return ResponseEntity.created(URI.create(BEER_ORDER_PATH + "/" + savedBeerOrder.getId().toString())).build();
+    }
+
+    @PutMapping(BEER_ORDER_PATH_ID)
+    public ResponseEntity<BeerOrderDTO> updateOrder(@PathVariable UUID beerOrderId, @RequestBody BeerOrderUpdateDTO beerOrderUpdateDTO) {
+        return ResponseEntity.ok(beerOrderService.updateOrder(beerOrderId, beerOrderUpdateDTO));
     }
 }

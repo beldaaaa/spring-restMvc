@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 import springframework.spring6restmvc.controllers.NotFoundException;
 import springframework.spring6restmvc.entities.BeerOrder;
 import springframework.spring6restmvc.entities.BeerOrderLine;
+import springframework.spring6restmvc.entities.BeerOrderShipment;
 import springframework.spring6restmvc.entities.Customer;
 import springframework.spring6restmvc.mappers.BeerOrderMapper;
 import springframework.spring6restmvc.models.BeerOrderCreateDTO;
 import springframework.spring6restmvc.models.BeerOrderDTO;
+import springframework.spring6restmvc.models.BeerOrderUpdateDTO;
 import springframework.spring6restmvc.repositories.BeerOrderRepository;
 import springframework.spring6restmvc.repositories.BeerRepository;
 import springframework.spring6restmvc.repositories.CustomerRepository;
@@ -68,4 +70,41 @@ public class BeerOrderServiceJPA implements BeerOrderService {
                 .customerRef(beerOrderCreateDTO.getCustomerRef())
                 .build());
     }
+
+    @Override
+    public BeerOrderDTO updateOrder(UUID beerOrderId, BeerOrderUpdateDTO beerOrderUpdateDTO) {
+        BeerOrder order = beerOrderRepository.findById(beerOrderId).orElseThrow(NotFoundException::new);
+
+        order.setCustomer(customerRepository.findById(beerOrderUpdateDTO.getCustomerId()).orElseThrow(NotFoundException::new));
+        order.setCustomerRef(beerOrderUpdateDTO.getCustomerRef());
+
+        beerOrderUpdateDTO.getBeerOrderLinesUpdateDTO().forEach(beerOrderLine -> {
+
+            if (beerOrderLine.getBeerId() != null) {
+                BeerOrderLine foundLine = order.getBeerOrderLines().stream()
+                        .filter(beerOrderLine1 -> beerOrderLine1.getId().equals(beerOrderLine.getLineId()))
+                        .findFirst().orElseThrow(NotFoundException::new);
+                foundLine.setBeer(beerRepository.findById(beerOrderLine.getBeerId()).orElseThrow(NotFoundException::new));
+                foundLine.setOrderQuantity(beerOrderLine.getOrderQuantity());
+                foundLine.setQuantityAllocated(beerOrderLine.getQuantityAllocated());
+            } else {
+                order.getBeerOrderLines().add(BeerOrderLine.builder()
+                        .beer(beerRepository.findById(beerOrderLine.getBeerId()).orElseThrow(NotFoundException::new))
+                        .orderQuantity(beerOrderLine.getOrderQuantity())
+                        .quantityAllocated(beerOrderLine.getQuantityAllocated())
+                        .build());
+            }
+        });
+
+        if (beerOrderUpdateDTO.getShipmentUpdateDTO() != null && beerOrderUpdateDTO.getShipmentUpdateDTO().getTrackingNumber() != null) {
+            if (order.getBeerOrderShipment() == null) {
+                order.setBeerOrderShipment(BeerOrderShipment.builder().trackingNumber(beerOrderUpdateDTO.getShipmentUpdateDTO().getTrackingNumber()).build());
+            } else {
+                order.getBeerOrderShipment().setTrackingNumber(beerOrderUpdateDTO.getShipmentUpdateDTO().getTrackingNumber());
+            }
+        }
+
+        return beerOrderMapper.beerOrderToBeerOrderDto(beerOrderRepository.save(order));
+    }
 }
+

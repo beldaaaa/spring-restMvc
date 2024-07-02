@@ -37,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static springframework.spring6restmvc.controllers.BeerControllerTest.jwtRequestPostProcessor;
 
 @RecordApplicationEvents
 @SpringBootTest//this is complete test with full context
@@ -185,7 +186,7 @@ class BeerControllerIT {
         beerDTO.setBeerName(beerName);
 
         mockMvc.perform(put(BeerController.BEER_PATH_ID,beer.getId())
-                        .with(BeerControllerTest.jwtRequestPostProcessor)
+                        .with(jwtRequestPostProcessor)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerDTO)))
@@ -208,7 +209,7 @@ class BeerControllerIT {
                 .build();
 
         mockMvc.perform(post(BeerController.BEER_PATH)
-                        .with(BeerControllerTest.jwtRequestPostProcessor)
+                        .with(jwtRequestPostProcessor)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerDTO)))
