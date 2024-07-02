@@ -1,6 +1,8 @@
 package springframework.spring6restmvc.services;
 
 import org.springframework.data.domain.Page;
+import springframework.spring6restmvc.entities.BeerOrder;
+import springframework.spring6restmvc.models.BeerOrderCreateDTO;
 import springframework.spring6restmvc.models.BeerOrderDTO;
 
 import java.util.Optional;
@@ -11,4 +13,6 @@ public interface BeerOrderService {
     Optional<BeerOrderDTO> findById(UUID beerOrderId);
 
     Page<BeerOrderDTO> listOrders(Integer pageNumber, Integer pageSize);
+
+    BeerOrder createBeerOrder(BeerOrderCreateDTO beerOrderCreateDTO);
 }
