@@ -15,4 +15,5 @@ public class BeerOrderShipmentUpdateDTO {
 
     @NotBlank
     private String trackingNumber;
+
 }
