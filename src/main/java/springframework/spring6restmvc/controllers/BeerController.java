@@ -8,9 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import springframework.spring6restmvc.models.BeerDTO;
-import springframework.spring6restmvc.models.BeerStyle;
 import springframework.spring6restmvc.services.BeerService;
+import springframework.springrestmvcapi.BeerDTO;
+import springframework.springrestmvcapi.BeerStyle;
 
 import java.util.UUID;
 

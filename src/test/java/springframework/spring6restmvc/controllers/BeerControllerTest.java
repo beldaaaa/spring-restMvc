@@ -14,9 +14,9 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import springframework.spring6restmvc.configs.SpringSecurityConfig;
-import springframework.spring6restmvc.models.BeerDTO;
 import springframework.spring6restmvc.services.BeerService;
 import springframework.spring6restmvc.services.BeerServiceImpl;
+import springframework.springrestmvcapi.BeerDTO;
 
 import java.time.Instant;
 import java.util.HashMap;

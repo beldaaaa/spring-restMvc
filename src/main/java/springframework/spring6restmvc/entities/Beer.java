@@ -10,7 +10,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
-import springframework.spring6restmvc.models.BeerStyle;
+import springframework.springrestmvcapi.BeerStyle;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

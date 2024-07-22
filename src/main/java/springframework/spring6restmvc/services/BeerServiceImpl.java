@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import springframework.spring6restmvc.models.BeerDTO;
-import springframework.spring6restmvc.models.BeerStyle;
+import springframework.springrestmvcapi.BeerDTO;
+import springframework.springrestmvcapi.BeerStyle;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

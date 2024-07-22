@@ -2,7 +2,7 @@ package springframework.spring6restmvc.mappers;
 
 import org.mapstruct.Mapper;
 import springframework.spring6restmvc.entities.Customer;
-import springframework.spring6restmvc.models.CustomerDTO;
+import springframework.springrestmvcapi.CustomerDTO;
 
 @Mapper
 public interface CustomerMapper {

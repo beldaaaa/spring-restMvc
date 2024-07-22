@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import springframework.spring6restmvc.entities.Beer;
-import springframework.spring6restmvc.models.BeerStyle;
+import springframework.springrestmvcapi.BeerStyle;
 
 import java.util.UUID;
 

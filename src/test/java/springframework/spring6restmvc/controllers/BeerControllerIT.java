@@ -22,9 +22,9 @@ import springframework.spring6restmvc.entities.Beer;
 import springframework.spring6restmvc.events.BeerCreatedEvent;
 import springframework.spring6restmvc.events.BeerUpdatedEvent;
 import springframework.spring6restmvc.mappers.BeerMapper;
-import springframework.spring6restmvc.models.BeerDTO;
-import springframework.spring6restmvc.models.BeerStyle;
 import springframework.spring6restmvc.repositories.BeerRepository;
+import springframework.springrestmvcapi.BeerDTO;
+import springframework.springrestmvcapi.BeerStyle;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

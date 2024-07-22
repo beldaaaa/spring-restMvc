@@ -5,10 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springframework.spring6restmvc.entities.BeerOrder;
-import springframework.spring6restmvc.models.BeerOrderCreateDTO;
-import springframework.spring6restmvc.models.BeerOrderDTO;
-import springframework.spring6restmvc.models.BeerOrderUpdateDTO;
 import springframework.spring6restmvc.services.BeerOrderService;
+import springframework.springrestmvcapi.BeerOrderCreateDTO;
+import springframework.springrestmvcapi.BeerOrderDTO;
+import springframework.springrestmvcapi.BeerOrderUpdateDTO;
 
 import java.net.URI;
 import java.util.UUID;

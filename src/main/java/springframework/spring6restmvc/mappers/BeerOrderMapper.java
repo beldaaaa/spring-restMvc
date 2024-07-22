@@ -5,9 +5,9 @@ import org.mapstruct.Mapping;
 import springframework.spring6restmvc.entities.BeerOrder;
 import springframework.spring6restmvc.entities.BeerOrderLine;
 import springframework.spring6restmvc.entities.BeerOrderShipment;
-import springframework.spring6restmvc.models.BeerOrderDTO;
-import springframework.spring6restmvc.models.BeerOrderLineDTO;
-import springframework.spring6restmvc.models.BeerOrderShipmentDTO;
+import springframework.springrestmvcapi.BeerOrderDTO;
+import springframework.springrestmvcapi.BeerOrderLineDTO;
+import springframework.springrestmvcapi.BeerOrderShipmentDTO;
 
 @Mapper
 public interface BeerOrderMapper {

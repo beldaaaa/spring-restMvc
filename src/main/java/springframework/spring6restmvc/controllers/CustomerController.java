@@ -6,8 +6,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springframework.spring6restmvc.models.CustomerDTO;
 import springframework.spring6restmvc.services.CustomerService;
+import springframework.springrestmvcapi.CustomerDTO;
 
 import java.util.List;
 import java.util.UUID;

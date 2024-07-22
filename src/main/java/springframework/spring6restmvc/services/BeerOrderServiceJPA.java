@@ -10,12 +10,12 @@ import springframework.spring6restmvc.entities.BeerOrderLine;
 import springframework.spring6restmvc.entities.BeerOrderShipment;
 import springframework.spring6restmvc.entities.Customer;
 import springframework.spring6restmvc.mappers.BeerOrderMapper;
-import springframework.spring6restmvc.models.BeerOrderCreateDTO;
-import springframework.spring6restmvc.models.BeerOrderDTO;
-import springframework.spring6restmvc.models.BeerOrderUpdateDTO;
 import springframework.spring6restmvc.repositories.BeerOrderRepository;
 import springframework.spring6restmvc.repositories.BeerRepository;
 import springframework.spring6restmvc.repositories.CustomerRepository;
+import springframework.springrestmvcapi.BeerOrderCreateDTO;
+import springframework.springrestmvcapi.BeerOrderDTO;
+import springframework.springrestmvcapi.BeerOrderUpdateDTO;
 
 import java.util.HashSet;
 import java.util.Optional;

@@ -19,9 +19,9 @@ import springframework.spring6restmvc.events.BeerDeletedEvent;
 import springframework.spring6restmvc.events.BeerPatchedEvent;
 import springframework.spring6restmvc.events.BeerUpdatedEvent;
 import springframework.spring6restmvc.mappers.BeerMapper;
-import springframework.spring6restmvc.models.BeerDTO;
-import springframework.spring6restmvc.models.BeerStyle;
 import springframework.spring6restmvc.repositories.BeerRepository;
+import springframework.springrestmvcapi.BeerDTO;
+import springframework.springrestmvcapi.BeerStyle;
 
 import java.util.Objects;
 import java.util.Optional;

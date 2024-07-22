@@ -14,10 +14,10 @@ import springframework.spring6restmvc.entities.Beer;
 import springframework.spring6restmvc.entities.BeerOrder;
 import springframework.spring6restmvc.entities.Customer;
 import springframework.spring6restmvc.mappers.BeerOrderMapper;
-import springframework.spring6restmvc.models.*;
 import springframework.spring6restmvc.repositories.BeerOrderRepository;
 import springframework.spring6restmvc.repositories.BeerRepository;
 import springframework.spring6restmvc.repositories.CustomerRepository;
+import springframework.springrestmvcapi.*;
 
 import java.util.HashSet;
 import java.util.Set;

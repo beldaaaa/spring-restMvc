@@ -1,8 +1,8 @@
 package springframework.spring6restmvc.services;
 
 import org.springframework.data.domain.Page;
-import springframework.spring6restmvc.models.BeerDTO;
-import springframework.spring6restmvc.models.BeerStyle;
+import springframework.springrestmvcapi.BeerDTO;
+import springframework.springrestmvcapi.BeerStyle;
 
 import java.util.Optional;
 import java.util.UUID;

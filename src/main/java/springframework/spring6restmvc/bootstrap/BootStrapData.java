@@ -11,11 +11,11 @@ import springframework.spring6restmvc.entities.BeerOrder;
 import springframework.spring6restmvc.entities.BeerOrderLine;
 import springframework.spring6restmvc.entities.Customer;
 import springframework.spring6restmvc.models.BeerCSVRecord;
-import springframework.spring6restmvc.models.BeerStyle;
 import springframework.spring6restmvc.repositories.BeerOrderRepository;
 import springframework.spring6restmvc.repositories.BeerRepository;
 import springframework.spring6restmvc.repositories.CustomerRepository;
 import springframework.spring6restmvc.services.BeerCsvService;
+import springframework.springrestmvcapi.BeerStyle;
 
 import java.io.File;
 import java.io.FileNotFoundException;

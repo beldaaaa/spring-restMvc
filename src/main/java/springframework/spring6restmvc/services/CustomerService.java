@@ -1,6 +1,6 @@
 package springframework.spring6restmvc.services;
 
-import springframework.spring6restmvc.models.CustomerDTO;
+import springframework.springrestmvcapi.CustomerDTO;
 
 import java.util.List;
 import java.util.Optional;
