@@ -1,6 +1,7 @@
 package springframework.spring6restmvc.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -13,9 +14,10 @@ import springframework.spring6restmvc.mappers.BeerOrderMapper;
 import springframework.spring6restmvc.repositories.BeerOrderRepository;
 import springframework.spring6restmvc.repositories.BeerRepository;
 import springframework.spring6restmvc.repositories.CustomerRepository;
-import springframework.springrestmvcapi.BeerOrderCreateDTO;
-import springframework.springrestmvcapi.BeerOrderDTO;
-import springframework.springrestmvcapi.BeerOrderUpdateDTO;
+import springframework.springrestmvcapi.model.BeerOrderCreateDTO;
+import springframework.springrestmvcapi.model.BeerOrderDTO;
+import springframework.springrestmvcapi.model.BeerOrderUpdateDTO;
+import springframework.springrestmvcapi.model.events.OrderPlacedEvent;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -30,6 +32,7 @@ public class BeerOrderServiceJPA implements BeerOrderService {
     private final BeerOrderMapper beerOrderMapper;
     private final CustomerRepository customerRepository;
     private final BeerRepository beerRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public Optional<BeerOrderDTO> findById(UUID beerOrderId) {
@@ -104,7 +107,14 @@ public class BeerOrderServiceJPA implements BeerOrderService {
             }
         }
 
-        return beerOrderMapper.beerOrderToBeerOrderDto(beerOrderRepository.save(order));
+        BeerOrderDTO beerOrderDTO = beerOrderMapper.beerOrderToBeerOrderDto(beerOrderRepository.save(order));
+
+        if(beerOrderUpdateDTO.getPaymentAmount() != null) {
+            eventPublisher.publishEvent(OrderPlacedEvent.builder()
+                    .beerOrderDTO(beerOrderDTO));
+        }
+
+        return beerOrderDTO;
     }
 
     @Override

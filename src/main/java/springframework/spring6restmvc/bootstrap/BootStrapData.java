@@ -15,7 +15,7 @@ import springframework.spring6restmvc.repositories.BeerOrderRepository;
 import springframework.spring6restmvc.repositories.BeerRepository;
 import springframework.spring6restmvc.repositories.CustomerRepository;
 import springframework.spring6restmvc.services.BeerCsvService;
-import springframework.springrestmvcapi.BeerStyle;
+import springframework.springrestmvcapi.model.BeerStyle;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import springframework.spring6restmvc.entities.Beer;
 import springframework.spring6restmvc.entities.BeerAudit;
-import springframework.springrestmvcapi.BeerDTO;
+import springframework.springrestmvcapi.model.BeerDTO;
 
 @Mapper//All I need is this IF with this annotation and Maven will make an implementation of it
 public interface BeerMapper {

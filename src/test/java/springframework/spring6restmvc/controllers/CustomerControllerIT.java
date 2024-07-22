@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import springframework.spring6restmvc.entities.Customer;
 import springframework.spring6restmvc.mappers.CustomerMapper;
 import springframework.spring6restmvc.repositories.CustomerRepository;
-import springframework.springrestmvcapi.CustomerDTO;
+import springframework.springrestmvcapi.model.CustomerDTO;
 
 import java.util.List;
 import java.util.UUID;

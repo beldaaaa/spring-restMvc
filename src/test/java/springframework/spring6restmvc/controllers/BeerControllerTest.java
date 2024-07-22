@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import springframework.spring6restmvc.configs.SpringSecurityConfig;
 import springframework.spring6restmvc.services.BeerService;
 import springframework.spring6restmvc.services.BeerServiceImpl;
-import springframework.springrestmvcapi.BeerDTO;
+import springframework.springrestmvcapi.model.BeerDTO;
 
 import java.time.Instant;
 import java.util.HashMap;

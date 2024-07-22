@@ -13,7 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import springframework.spring6restmvc.services.CustomerService;
 import springframework.spring6restmvc.services.CustomerServiceImpl;
-import springframework.springrestmvcapi.CustomerDTO;
+import springframework.springrestmvcapi.model.CustomerDTO;
 
 import java.util.HashMap;
 import java.util.Map;

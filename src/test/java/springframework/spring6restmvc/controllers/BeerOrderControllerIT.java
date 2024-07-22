@@ -17,7 +17,7 @@ import springframework.spring6restmvc.mappers.BeerOrderMapper;
 import springframework.spring6restmvc.repositories.BeerOrderRepository;
 import springframework.spring6restmvc.repositories.BeerRepository;
 import springframework.spring6restmvc.repositories.CustomerRepository;
-import springframework.springrestmvcapi.*;
+import springframework.springrestmvcapi.model.*;
 
 import java.util.HashSet;
 import java.util.Set;
