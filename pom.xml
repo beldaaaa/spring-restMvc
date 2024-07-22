@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>springframework</groupId>
-    <artifactId>spring-6-rest-mvc</artifactId>
+    <artifactId>spring-rest-mvc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>spring-6-rest-mvc</name>
     <description>Demo project for Spring Boot</description>

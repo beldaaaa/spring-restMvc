@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Set;
 import java.util.UUID;
@@ -22,7 +23,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 public class BeerOrder {
-    public BeerOrder(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate, String customerRef, Customer customer, Set<BeerOrderLine> beerOrderLines, BeerOrderShipment beerOrderShipment) {
+    public BeerOrder(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate, String customerRef, Customer customer, Set<BeerOrderLine> beerOrderLines, BeerOrderShipment beerOrderShipment, BigDecimal paymentAmount) {
         this.id = id;
         this.version = version;
         this.createdDate = createdDate;
@@ -31,6 +32,7 @@ public class BeerOrder {
         this.setCustomer(customer);//when builder makes an action this allArgsCtor is called and the setCustomer is utilized
         this.setBeerOrderLines(beerOrderLines);
         this.setBeerOrderShipment(beerOrderShipment);
+        this.setPaymentAmount(paymentAmount);
     }
 
     @Id
@@ -88,4 +90,6 @@ public class BeerOrder {
     //Whenever I save a beer order object, the beer order shipment object will also get update to the DB
     //(Hibernate manages these properties and I don't have to code it)
     private BeerOrderShipment beerOrderShipment;
+
+    private BigDecimal paymentAmount;
 }
